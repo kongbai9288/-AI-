@@ -1,0 +1,63 @@
+name: Fetch Fabric Server Kit
+
+# 用仓库自带的 fabric-installer 生成一套可直接运行的 MC 26.2 Fabric 服务端,
+# 推送到 serverkit 分支, 供本地做 mod 加载冒烟测试。
+on:
+  workflow_dispatch:
+    inputs:
+      mc_version:
+        description: 'Minecraft 版本'
+        required: false
+        default: '26.2'
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '25'
+
+      - name: 生成 Fabric 服务端
+        run: |
+          mkdir -p serverkit
+          cd serverkit
+          java -jar ../toolchain/fabric-installer-1.1.2.jar server \
+            -mcversion "${{ inputs.mc_version || '26.2' }}" \
+            -loader 0.19.5 \
+            -downloadMinecraft
+          echo "=== 生成结果 ==="
+          ls -la
+
+      - name: 清单
+        run: |
+          du -sh serverkit/
+          find serverkit -maxdepth 1 -type f | sort
+
+      - name: 打包分卷
+        run: |
+          rm -rf /tmp/sk && mkdir -p /tmp/sk
+          cd serverkit
+          tar czf - . | split -b 90m -d -a 2 - /tmp/sk/serverkit.tar.gz.part-
+          cd /tmp/sk && ls -lh
+
+      - name: 推送到 serverkit 分支
+        run: |
+          cd /tmp/sk
+          git init -q .
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -q -b serverkit
+          git add -A
+          git commit -q -m "serverkit: MC ${{ inputs.mc_version || '26.2' }} fabric server"
+          git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          git push -q -f origin serverkit
+          echo "已推送 serverkit 分支"
