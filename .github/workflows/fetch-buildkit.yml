@@ -1,7 +1,7 @@
 name: Fetch MC Build Kit
 
 # 仅作为「下载代理」: 在无外网的环境里, 由 Actions 代为抓取
-# Minecraft 本体与编译期依赖, 打包成 artifact 供本地 javac 使用。
+# Minecraft 本体与编译期依赖, 推送到 buildkit 分支供外部取用。
 on:
   workflow_dispatch:
     inputs:
@@ -11,7 +11,7 @@ on:
         default: '26.2'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   fetch:
@@ -34,10 +34,22 @@ jobs:
           ls -lh buildkit/ | head -20
           echo "=== classpath 条目 ==="
           tr ':' '\n' < buildkit/classpath.txt | wc -l
+          du -sh buildkit/
 
-      - name: 上传 buildkit
-        uses: actions/upload-artifact@v4
-        with:
-          name: buildkit-${{ inputs.mc_version || '26.2' }}
-          path: buildkit/
-          retention-days: 30
+      - name: 打包分卷
+        run: |
+          rm -rf /tmp/bk && mkdir -p /tmp/bk
+          cd buildkit
+          tar czf - . | split -b 90m -d -a 2 - /tmp/bk/buildkit.tar.gz.part-
+          cd /tmp/bk && ls -lh
+
+      - name: 推送到 buildkit 分支
+        run: |
+          cd /tmp/bk
+          git init -q .
+          git checkout -q -b buildkit
+          git add -A
+          git commit -q -m "buildkit: MC ${{ inputs.mc_version || '26.2' }} @ $(date -u +%Y%m%dT%H%M%SZ)"
+          git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          git push -q -f origin buildkit
+          echo "已推送 buildkit 分支"
