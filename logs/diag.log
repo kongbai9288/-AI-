@@ -1,7 +1,6 @@
-=== meta.fabricmc game (最新10个) ===
-['26.3-rc-2', '26.3-rc-1', '26.3-pre-3', '26.3-pre-2', '26.3-pre-1', '26.3-snapshot-10', '26.3-snapshot-9', '26.3-snapshot-8', '26.3-snapshot-7', '26.3-snapshot-6']
-stable: ['26.2', '26.1.2', '26.1.1', '26.1', '1.21.11']
-=== yarn 中 1.21.11 的 gameVersion ===
+=== yarn 中 gameVersion=26.2 的条目 ===
+count: 0
+=== yarn 最新10个的 gameVersion ===
 1.21.11+build.6 -> 1.21.11
 1.21.11+build.5 -> 1.21.11
 1.21.11+build.4 -> 1.21.11
@@ -12,16 +11,9 @@ stable: ['26.2', '26.1.2', '26.1.1', '26.1', '1.21.11']
 1.21.11-rc2+build.1 -> 1.21.11-rc2
 1.21.11-rc1+build.1 -> 1.21.11-rc1
 1.21.11-pre5+build.1 -> 1.21.11-pre5
-1.21.11-pre4+build.1 -> 1.21.11-pre4
-1.21.11-pre3+build.2 -> 1.21.11-pre3
-1.21.11-pre3+build.1 -> 1.21.11-pre3
-1.21.11-pre2+build.4 -> 1.21.11-pre2
-1.21.11-pre2+build.3 -> 1.21.11-pre2
-1.21.11-pre2+build.2 -> 1.21.11-pre2
-1.21.11-pre2+build.1 -> 1.21.11-pre2
-1.21.11-pre1+build.3 -> 1.21.11-pre1
-1.21.11-pre1+build.2 -> 1.21.11-pre1
-1.21.11-pre1+build.1 -> 1.21.11-pre1
-=== mojang 版本清单 前12 ===
-['26.3-rc-2', '26.3-rc-1', '26.3-pre-3', '26.3-pre-2', '26.3-pre-1', '26.3-snapshot-10', '26.3-snapshot-9', '26.3-snapshot-8', '26.3-snapshot-7', '26.3-snapshot-6', '26.3-snapshot-5', '26.3-snapshot-4']
-latest: {'release': '26.2', 'snapshot': '26.3-rc-2'}
+=== intermediary 最新5个 ===
+26.3-rc-2
+26.3-rc-1
+26.3-pre-3
+26.3-pre-2
+26.3-pre-1
