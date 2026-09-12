@@ -47,6 +47,8 @@ jobs:
         run: |
           cd /tmp/bk
           git init -q .
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -q -b buildkit
           git add -A
           git commit -q -m "buildkit: MC ${{ inputs.mc_version || '26.2' }} @ $(date -u +%Y%m%dT%H%M%SZ)"
