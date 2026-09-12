@@ -1,5 +1,5 @@
 RUNNER_TEMP=/home/runner/work/_temp  HOME=/home/runner  whoami=runner
--rw-r--r-- 1 runner runner 137393837 Sep 12 11:22 /tmp/gradle.zip
+-rw-r--r-- 1 runner runner 137393837 Sep 12 11:24 /tmp/gradle.zip
 gradle-8.14.3
 
 Welcome to Gradle 8.14.3!
@@ -23,7 +23,7 @@ Revision:      e5ee1df3d88b8ca3a8074787a94f373e3090e1db
 Kotlin:        2.0.21
 Groovy:        3.0.24
 Ant:           Apache Ant(TM) version 1.10.15 compiled on August 25 2024
-Launcher JVM:  25.0.4.1 (Eclipse Adoptium 25.0.4.1+1-LTS)
-Daemon JVM:    /usr/lib/jvm/temurin-25-jdk-amd64 (no JDK specified, using current Java home)
+Launcher JVM:  21.0.12.1 (Eclipse Adoptium 21.0.12.1+1-LTS)
+Daemon JVM:    /usr/lib/jvm/temurin-21-jdk-amd64 (no JDK specified, using current Java home)
 OS:            Linux 6.17.0-1022-azure amd64
 
