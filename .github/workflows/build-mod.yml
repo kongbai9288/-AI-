@@ -28,23 +28,35 @@ jobs:
 
       - name: 解析最新 Loom 版本
         run: |
-          LOOM=$(curl -sSL https://maven.fabricmc.net/net/fabricmc/fabric-loom/maven-metadata.xml \
-                | grep -o '<version>[^<]*</version>' | tail -1 | sed 's/<\/*version>//g')
-          echo "解析到 loom: $LOOM"
-          sed -i "s/^loom_version=.*/loom_version=$LOOM/" rollinglog/gradle.properties
+          mkdir -p logs
+          {
+            curl -sSL https://maven.fabricmc.net/net/fabricmc/fabric-loom/maven-metadata.xml \
+              | grep -o '<version>[^<]*</version>' | tail -1 | sed 's/<\/*version>//g' > /tmp/loom.txt
+            LOOM=$(cat /tmp/loom.txt)
+            echo "loom=$LOOM"
+            sed -i "s/^loom_version=.*/loom_version=$LOOM/" rollinglog/gradle.properties
+            cat rollinglog/gradle.properties
+          } 2>&1 | tee logs/resolve-loom.log
 
       - name: 准备 Gradle
         run: |
-          curl -sSL -o /tmp/gradle.zip https://services.gradle.org/distributions/gradle-8.14.3-bin.zip
-          mkdir -p "$RUNNER_TEMP/gdist"
-          unzip -q /tmp/gradle.zip -d "$RUNNER_TEMP/gdist"
-          echo "$RUNNER_TEMP/gdist/gradle-8.14.3/bin" >> $GITHUB_PATH
+          mkdir -p logs
+          {
+            echo "RUNNER_TEMP=$RUNNER_TEMP  HOME=$HOME  whoami=$(whoami)"
+            curl -sSL -o /tmp/gradle.zip https://services.gradle.org/distributions/gradle-8.14.3-bin.zip
+            ls -la /tmp/gradle.zip
+            mkdir -p "$RUNNER_TEMP/gdist"
+            unzip -q /tmp/gradle.zip -d "$RUNNER_TEMP/gdist"
+            ls "$RUNNER_TEMP/gdist"
+            echo "$RUNNER_TEMP/gdist/gradle-8.14.3/bin" >> $GITHUB_PATH
+            "$RUNNER_TEMP/gdist/gradle-8.14.3/bin/gradle" --version
+          } 2>&1 | tee logs/prepare-gradle.log
 
       - name: 构建
         id: gradle
         working-directory: rollinglog
         continue-on-error: true
-        run: gradle build --no-daemon --stacktrace 2>&1 | tee build.log
+        run: gradle build --no-daemon --stacktrace 2>&1 | tee ../logs/build.log
 
       - name: 收集结果
         if: always()
@@ -53,10 +65,10 @@ jobs:
           if ls rollinglog/build/libs/*.jar >/dev/null 2>&1; then
             cp rollinglog/build/libs/*.jar build-out/
             echo "BUILD_OK=true" >> $GITHUB_ENV
+            ls -la build-out/
           else
             echo "BUILD_OK=false" >> $GITHUB_ENV
           fi
-          cp rollinglog/build.log build-out/build.log 2>/dev/null || true
 
       - name: 上传产物
         if: always()
@@ -71,7 +83,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A build-out/
+          git add -A logs/ build-out/
           if git diff --staged --quiet; then
             echo "无变化"
           else
