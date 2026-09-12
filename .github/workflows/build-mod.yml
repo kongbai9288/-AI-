@@ -56,12 +56,12 @@ jobs:
         run: |
           mkdir -p logs
           {
-            echo "=== meta.fabricmc game (最新10个) ==="
-            curl -sSL https://meta.fabricmc.net/v2/versions/game | python3 -c "import json,sys; d=json.load(sys.stdin); print([g['version'] for g in d[:10]]); print('stable:', [g['version'] for g in d if g.get('stable')][:5])"
-            echo "=== yarn 中 1.21.11 的 gameVersion ==="
-            curl -sSL https://meta.fabricmc.net/v2/versions/yarn | python3 -c "import json,sys; d=json.load(sys.stdin); [print(y.get('version'), '->', y.get('gameVersion')) for y in d if '1.21.11' in str(y.get('version',''))][:6]"
-            echo "=== mojang 版本清单 前12 ==="
-            curl -sSL https://piston-meta.mojang.com/mc/game/version_manifest_v2.json | python3 -c "import json,sys; d=json.load(sys.stdin); print([v['id'] for v in d['versions'][:12]]); print('latest:', d['latest'])"
+            echo "=== yarn 中 gameVersion=26.2 的条目 ==="
+            curl -sSL https://meta.fabricmc.net/v2/versions/yarn | python3 -c "import json,sys; d=json.load(sys.stdin); r=[y for y in d if y.get('gameVersion')=='26.2']; print('count:',len(r)); [print(y.get('version')) for y in r[:8]]"
+            echo "=== yarn 最新10个的 gameVersion ==="
+            curl -sSL https://meta.fabricmc.net/v2/versions/yarn | python3 -c "import json,sys; d=json.load(sys.stdin); [print(y.get('version'),'->',y.get('gameVersion')) for y in d[:10]]"
+            echo "=== intermediary 最新5个 ==="
+            curl -sSL https://meta.fabricmc.net/v2/versions/intermediary | python3 -c "import json,sys; d=json.load(sys.stdin); [print(i.get('version')) for i in d[:5]]"
           } 2>&1 | tee logs/diag.log
 
       - name: 构建
