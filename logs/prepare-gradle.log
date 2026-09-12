@@ -1,28 +1,28 @@
 RUNNER_TEMP=/home/runner/work/_temp  HOME=/home/runner  whoami=runner
--rw-r--r-- 1 runner runner 134528013 Sep 12 11:25 /tmp/gradle.zip
-gradle-9.1.0
+-rw-r--r-- 1 runner runner 150308896 Sep 12 11:27 /tmp/gradle.zip
+gradle-9.7.0
 
-Welcome to Gradle 9.1.0!
+Welcome to Gradle 9.7.0!
 
 Here are the highlights of this release:
- - Full Java 25 support
- - Native task graph visualization
- - Enhanced console output
+ - Isolated Projects graduates to incubating
+ - Broader Configuration Cache compatibility
+ - More source locations in problem reports
 
-For more details see https://docs.gradle.org/9.1.0/release-notes.html
+For more details see https://docs.gradle.org/9.7.0/release-notes.html
 
 
 ------------------------------------------------------------
-Gradle 9.1.0
+Gradle 9.7.0
 ------------------------------------------------------------
 
-Build time:    2025-09-18 13:05:56 UTC
-Revision:      e45a8dbf2470c2e2474ccc25be9f49331406a07e
+Build time:    2026-08-06 14:07:35 UTC
+Revision:      3defbfc59d757b873d787b2261de5c7f8a00970a
 
-Kotlin:        2.2.0
-Groovy:        4.0.28
-Ant:           Apache Ant(TM) version 1.10.15 compiled on August 25 2024
+Kotlin:        2.4.0
+Groovy:        4.0.32
+Ant:           Apache Ant(TM) version 1.10.17 compiled on April 6 2026
 Launcher JVM:  25.0.4.1 (Eclipse Adoptium 25.0.4.1+1-LTS)
-Daemon JVM:    /usr/lib/jvm/temurin-25-jdk-amd64 (no JDK specified, using current Java home)
+Daemon JVM:    /usr/lib/jvm/temurin-25-jdk-amd64 (no Daemon JVM specified, using current Java home)
 OS:            Linux 6.17.0-1022-azure amd64
 
