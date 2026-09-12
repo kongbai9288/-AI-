@@ -43,13 +43,13 @@ jobs:
           mkdir -p logs
           {
             echo "RUNNER_TEMP=$RUNNER_TEMP  HOME=$HOME  whoami=$(whoami)"
-            curl -sSL -o /tmp/gradle.zip https://services.gradle.org/distributions/gradle-9.1.0-bin.zip
+            curl -sSL -o /tmp/gradle.zip https://services.gradle.org/distributions/gradle-9.7.0-bin.zip
             ls -la /tmp/gradle.zip
             mkdir -p "$RUNNER_TEMP/gdist"
             unzip -q /tmp/gradle.zip -d "$RUNNER_TEMP/gdist"
             ls "$RUNNER_TEMP/gdist"
-            echo "$RUNNER_TEMP/gdist/gradle-9.1.0/bin" >> $GITHUB_PATH
-            "$RUNNER_TEMP/gdist/gradle-9.1.0/bin/gradle" --version
+            echo "$RUNNER_TEMP/gdist/gradle-9.7.0/bin" >> $GITHUB_PATH
+            "$RUNNER_TEMP/gdist/gradle-9.7.0/bin/gradle" --version
           } 2>&1 | tee logs/prepare-gradle.log
 
       - name: 构建
