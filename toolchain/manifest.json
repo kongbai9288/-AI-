@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "generated_at": "2026-09-12T10:14:32+00:00",
+  "jdk": {
+    "file": "jdk-25-linux-x64.tar.gz",
+    "sha256": "",
+    "size": 141329719,
+    "parts": [
+      "jdk-25-linux-x64.tar.gz.part-00",
+      "jdk-25-linux-x64.tar.gz.part-01"
+    ],
+    "major": "25",
+    "vendor": "eclipse-temurin",
+    "platform": "linux-x64"
+  },
+  "fabric": {
+    "minecraft": "26.2",
+    "loader": {
+      "file": "fabric-loader-0.19.5.jar",
+      "sha256": "93044e4dd46de5d8136701292f05e868da096d2c9fddb4793e4fdbcc63efc695",
+      "size": 1984980,
+      "version": "0.19.5"
+    },
+    "installer": {
+      "file": "fabric-installer-1.1.2.jar",
+      "sha256": "61e035bf7bf70153e127440ce34de47c9036f0a2d0c65d1529454bd35ceefe4f",
+      "size": 212123,
+      "version": "1.1.2"
+    },
+    "yarn": {
+      "file": "yarn-1.21.11+build.6.jar",
+      "sha256": "0992cc59fd14532c62a8431b53e198c916abeca1c7f64420f741959e29630c68",
+      "size": 1286081,
+      "version": "1.21.11+build.6"
+    },
+    "api": {
+      "file": "fabric-api-0.160.0+26.2.jar",
+      "sha256": "5f3dff88e1661166e222213302b25ace6c36dc3683804cbd4b5acf93138ea05e",
+      "size": 2542898,
+      "version": "0.160.0+26.2"
+    }
+  },
+  "reassemble": {
+    "note": "分卷文件用 cat 合并: cat <file>.part-* > <file>",
+    "example": "cat jdk-25-linux-x64.tar.gz.part-* > jdk-25-linux-x64.tar.gz"
+  },
+  "legal": {
+    "minecraft_jar": "本仓库不含 Minecraft 客户端/服务端 jar。Fabric Loom 在构建时会自动从 Mojang 官方服务器拉取, 请遵守 Mojang/Microsoft EULA。",
+    "included": "仅含开源工具链: JDK(开源许可) + Fabric loader/installer/yarn/API(开源许可)"
+  }
+}
