@@ -52,6 +52,18 @@ jobs:
             "$RUNNER_TEMP/gdist/gradle-9.7.0/bin/gradle" --version
           } 2>&1 | tee logs/prepare-gradle.log
 
+      - name: 诊断 MC 版本
+        run: |
+          mkdir -p logs
+          {
+            echo "=== meta.fabricmc game (最新10个) ==="
+            curl -sSL https://meta.fabricmc.net/v2/versions/game | python3 -c "import json,sys; d=json.load(sys.stdin); print([g['version'] for g in d[:10]]); print('stable:', [g['version'] for g in d if g.get('stable')][:5])"
+            echo "=== yarn 中 1.21.11 的 gameVersion ==="
+            curl -sSL https://meta.fabricmc.net/v2/versions/yarn | python3 -c "import json,sys; d=json.load(sys.stdin); [print(y.get('version'), '->', y.get('gameVersion')) for y in d if '1.21.11' in str(y.get('version',''))][:6]"
+            echo "=== mojang 版本清单 前12 ==="
+            curl -sSL https://piston-meta.mojang.com/mc/game/version_manifest_v2.json | python3 -c "import json,sys; d=json.load(sys.stdin); print([v['id'] for v in d['versions'][:12]]); print('latest:', d['latest'])"
+          } 2>&1 | tee logs/diag.log
+
       - name: 构建
         id: gradle
         working-directory: rollinglog
