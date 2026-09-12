@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "aimod",
+  "version": "${version}",
+  "name": "AI Fabric Mod",
+  "description": "由 AI 生成的 Fabric mod 骨架",
+  "authors": ["AI"],
+  "contact": {},
+  "license": "MIT",
+  "environment": "*",
+  "icon": "assets/aimod/icon.png",
+  "entrypoints": {
+    "main": [
+      "com.example.aimod.AIMod"
+    ],
+    "client": [
+      "com.example.aimod.client.AIModClient"
+    ]
+  },
+  "mixins": [
+    "aimod.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "minecraft": "${minecraft_version}",
+    "java": ">=${java_version}",
+    "fabric-api": "*"
+  },
+  "suggests": {}
+}

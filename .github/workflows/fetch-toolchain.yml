@@ -1,0 +1,83 @@
+name: Fetch Toolchain (JDK + Fabric)
+
+# 自动把 JDK 与 Fabric 开发工具链抓进仓库，供 AI / 自动化流程取用
+on:
+  workflow_dispatch:
+    inputs:
+      jdk_major:
+        description: 'JDK 主版本'
+        required: false
+        default: '25'
+      mc_version:
+        description: 'Minecraft 目标版本 (留空=自动取最新稳定版)'
+        required: false
+        default: ''
+      refresh:
+        description: '强制重新下载(即使版本未变)'
+        required: false
+        type: boolean
+        default: false
+  # 每周一 03:00 UTC 检查上游新版本
+  schedule:
+    - cron: '0 3 * * 1'
+  # 改清单文件也触发
+  push:
+    paths:
+      - 'toolchain-manifest.json'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fetch-toolchain
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python (用于 JSON/XML 解析)
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 拉取工具链
+        id: fetch
+        env:
+          JDK_MAJOR: ${{ inputs.jdk_major || '25' }}
+          MC_VERSION: ${{ inputs.mc_version || '' }}
+        run: |
+          chmod +x scripts/build-toolchain.sh
+          ./scripts/build-toolchain.sh "$JDK_MAJOR" "$MC_VERSION" toolchain 90m
+
+      - name: 校验产物
+        run: |
+          echo "=== 工具链目录 ==="
+          ls -lh toolchain/
+          echo
+          echo "=== manifest ==="
+          cat toolchain/manifest.json
+
+      - name: 版本有变化则提交
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A toolchain/
+          if git diff --staged --quiet; then
+            echo "无版本变化，跳过提交"
+          else
+            MC=$(python3 -c "import json;print(json.load(open('toolchain/manifest.json'))['fabric']['minecraft'])")
+            git commit -m "chore(toolchain): JDK ${JDK_MAJOR:-25} + Fabric for MC $MC"
+            git push
+            echo "已提交更新"
+          fi
+
+      - name: 上传产物副本 (便于直接下载, 保留 7 天)
+        uses: actions/upload-artifact@v4
+        with:
+          name: toolchain-${{ github.run_number }}
+          path: toolchain/
+          retention-days: 7
