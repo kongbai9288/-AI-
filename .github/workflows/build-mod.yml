@@ -33,19 +33,18 @@ jobs:
           echo "解析到 loom: $LOOM"
           sed -i "s/^loom_version=.*/loom_version=$LOOM/" rollinglog/gradle.properties
 
-      - name: 准备 Gradle Wrapper
+      - name: 准备 Gradle
         run: |
           curl -sSL -o /tmp/gradle.zip https://services.gradle.org/distributions/gradle-8.14.3-bin.zip
-          unzip -q /tmp/gradle.zip -d /opt/
-          cd rollinglog
-          /opt/gradle-8.14.3/bin/gradle wrapper --gradle-version 8.14.3 --no-daemon
-          chmod +x gradlew
+          mkdir -p "$RUNNER_TEMP/gdist"
+          unzip -q /tmp/gradle.zip -d "$RUNNER_TEMP/gdist"
+          echo "$RUNNER_TEMP/gdist/gradle-8.14.3/bin" >> $GITHUB_PATH
 
       - name: 构建
         id: gradle
         working-directory: rollinglog
         continue-on-error: true
-        run: ./gradlew build --no-daemon --stacktrace 2>&1 | tee build.log
+        run: gradle build --no-daemon --stacktrace 2>&1 | tee build.log
 
       - name: 收集结果
         if: always()
