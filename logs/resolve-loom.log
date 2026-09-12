@@ -1,5 +1,5 @@
 loom=1.18.0-alpha.21
-java_version=21
+java_version=25
 minecraft_version=26.2
 yarn_mappings=1.21.11+build.6
 loader_version=0.19.5

@@ -1,29 +1,28 @@
 RUNNER_TEMP=/home/runner/work/_temp  HOME=/home/runner  whoami=runner
--rw-r--r-- 1 runner runner 137393837 Sep 12 11:24 /tmp/gradle.zip
-gradle-8.14.3
+-rw-r--r-- 1 runner runner 134528013 Sep 12 11:25 /tmp/gradle.zip
+gradle-9.1.0
 
-Welcome to Gradle 8.14.3!
+Welcome to Gradle 9.1.0!
 
 Here are the highlights of this release:
- - Java 24 support
- - GraalVM Native Image toolchain selection
- - Enhancements to test reporting
- - Build Authoring improvements
+ - Full Java 25 support
+ - Native task graph visualization
+ - Enhanced console output
 
-For more details see https://docs.gradle.org/8.14.3/release-notes.html
+For more details see https://docs.gradle.org/9.1.0/release-notes.html
 
 
 ------------------------------------------------------------
-Gradle 8.14.3
+Gradle 9.1.0
 ------------------------------------------------------------
 
-Build time:    2025-07-04 13:15:44 UTC
-Revision:      e5ee1df3d88b8ca3a8074787a94f373e3090e1db
+Build time:    2025-09-18 13:05:56 UTC
+Revision:      e45a8dbf2470c2e2474ccc25be9f49331406a07e
 
-Kotlin:        2.0.21
-Groovy:        3.0.24
+Kotlin:        2.2.0
+Groovy:        4.0.28
 Ant:           Apache Ant(TM) version 1.10.15 compiled on August 25 2024
-Launcher JVM:  21.0.12.1 (Eclipse Adoptium 21.0.12.1+1-LTS)
-Daemon JVM:    /usr/lib/jvm/temurin-21-jdk-amd64 (no JDK specified, using current Java home)
+Launcher JVM:  25.0.4.1 (Eclipse Adoptium 25.0.4.1+1-LTS)
+Daemon JVM:    /usr/lib/jvm/temurin-25-jdk-amd64 (no JDK specified, using current Java home)
 OS:            Linux 6.17.0-1022-azure amd64
 
