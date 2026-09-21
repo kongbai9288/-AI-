@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_at": "2026-09-12T10:14:32+00:00",
+  "generated_at": "2026-09-21T08:32:45+00:00",
   "jdk": {
     "file": "jdk-25-linux-x64.tar.gz",
     "sha256": "",
@@ -14,7 +14,7 @@
     "platform": "linux-x64"
   },
   "fabric": {
-    "minecraft": "26.2",
+    "minecraft": "26.3",
     "loader": {
       "file": "fabric-loader-0.19.5.jar",
       "sha256": "93044e4dd46de5d8136701292f05e868da096d2c9fddb4793e4fdbcc63efc695",
@@ -34,10 +34,10 @@
       "version": "1.21.11+build.6"
     },
     "api": {
-      "file": "fabric-api-0.160.0+26.2.jar",
-      "sha256": "5f3dff88e1661166e222213302b25ace6c36dc3683804cbd4b5acf93138ea05e",
-      "size": 2542898,
-      "version": "0.160.0+26.2"
+      "file": "fabric-api-0.161.0+26.3.jar",
+      "sha256": "86f16178a3cecc887a85a4cfe9a79d92fa7341d8f39b5951a4d6ad800ab657a6",
+      "size": 2620967,
+      "version": "0.161.0+26.3"
     }
   },
   "reassemble": {
