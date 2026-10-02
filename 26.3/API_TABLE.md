@@ -8,51 +8,76 @@
 - Minecraft 本体条目：`javap -v` 读 fabric-api 的 mixin 注解，从 `@Inject/@Redirect/@Overwrite` 的 `target="Lnet/minecraft/...;method()Desc"` 与 `method="..."` 取出真实 MC 签名（mixin 目标方法写错就注入失败，所以这是硬证据）。本次共采集 626 条注解证据。
 - 符号探测条目：在全部子模块的 class 常量池里搜字节串，看该 MC 符号是否被 Fabric 代码引用（**只能证明"被引用"，不能证明"不存在"**，故只做记录不做断言）。
 
-| # | 类别 | API | 预期 | 实测 | 状态 |
-|---|---|---|---|---|---|
-| 1 | Fabric API | `net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents` | present | present | PASS |
-| 2 | Fabric API | `net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents$ModifyOutput` | present | present | PASS |
-| 3 | Fabric API | `net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTabOutput` | present | present | PASS |
-| 4 | Fabric API | `net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents` | absent | absent | PASS |
-| 5 | Fabric API | `net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents` | present | present | PASS |
-| 6 | Fabric API | `net.fabricmc.fabric.api.registry.FuelValueEvents` | absent | absent | PASS |
-| 7 | Fabric API | `net.fabricmc.fabric.api.registry.CompostableRegistry` | absent | absent | PASS |
-| 8 | Fabric API | `net.fabricmc.fabric.api.registry.FabricPotionBrewingBuilder` | absent | absent | PASS |
-| 9 | Fabric API | `net.fabricmc.fabric.api.datagen.v1.provider.FabricBrewingProvider` | present | present | PASS |
-| 10 | Fabric API | `net.fabricmc.fabric.api.registry.StrippableBlockRegistry` | absent | absent | PASS |
-| 11 | Fabric API | `net.fabricmc.fabric.api.registry.TillableBlockRegistry` | absent | absent | PASS |
-| 12 | Fabric API | `net.fabricmc.fabric.api.registry.FlattenableBlockRegistry` | absent | absent | PASS |
-| 13 | Fabric API | `net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes` | present | present | PASS |
-| 14 | Fabric API | `net.fabricmc.fabric.api.block.v1.FluidFlowEvents` | present | present | PASS |
-| 15 | Fabric API | `net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback` | present | present | PASS |
-| 16 | Fabric API | `net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents` | present | present | PASS |
-| 17 | Fabric API | `net.fabricmc.fabric.api.event.player.UseBlockCallback` | present | present | PASS |
-| 18 | Fabric API | `net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry` | present | present | PASS |
-| 19 | Fabric API | `net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback` | present | present | PASS |
-| 20 | Fabric API | `net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents` | present | present | PASS |
-| 21 | Fabric API | `net.fabricmc.fabric.api.biome.v1.BiomeModifications` | present | present | PASS |
-| 22 | Fabric API | `net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry` | present | present | PASS |
-| 23 | Fabric API | `net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry` | present | present | PASS |
-| 24 | Fabric API | `net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking` | present | present | PASS |
-| 25 | Fabric API | `net.fabricmc.fabric.api.event.registry.RegistryAttributeHolder` | present | present | PASS |
-| 26 | MC 本体 | `net/minecraft/world/item/Item.use` | present | present | PASS |
-| 27 | MC 本体 | `net/minecraft/server/level/ServerLevel.addFreshEntity` | present | present | PASS |
-| 28 | MC 本体 | `net/minecraft/world/level/Level.getBlockState` | present | present | PASS |
-| 29 | MC 本体 | `net/minecraft/world/item/ItemStack.hurtAndBreak` | present | present | PASS |
-| 30 | MC 本体 | `net/minecraft/world/item/Item.getCraftingRemainder` | present | present | PASS |
-| 31 | MC 本体 | `net/minecraft/world/level/block/state/BlockState.isAir` | present | present | PASS |
-| 32 | MC 本体 | `net/minecraft/world/level/block/EnchantingTableBlock.isValidBookShelf` | present | present | PASS |
-| 33 | MC 本体 | `net/minecraft/world/entity/Entity.readAdditionalSaveData` | present | present | PASS |
-| 34 | MC 本体 | `net/minecraft/world/entity/Entity.hurt` | present | no-evidence | UNPROVEN |
-| 35 | MC 本体 | `net/minecraft/world/entity/Entity.hurtServer` | present | present(symbol) | PASS |
-| 36 | MC 本体 | `net/minecraft/world/entity/Entity.killedEntity` | present | present | PASS |
-| 37 | MC 本体 | `net/minecraft/world/item/ItemStack.addToTooltip` | present | present | PASS |
-| 38 | MC 本体 | `net/minecraft/client/multiplayer/MultiPlayerGameMode.interact` | present | present | PASS |
-| 39 | 符号探测 | `常量池符号 COOKING_FUEL` | info | absent | INFO |
-| 40 | 符号探测 | `常量池符号 COMPOSTABLE` | info | present | INFO |
-| 41 | 符号探测 | `常量池符号 BREWING_FUEL` | info | absent | INFO |
-| 42 | 符号探测 | `常量池符号 getProvidedEnchantmentPower` | info | present | INFO |
-| 43 | 符号探测 | `常量池符号 InputConstants` | info | present | INFO |
+| # | 端 | 类别 | API | 预期 | 实测 | 状态 |
+|---|---|---|---|---|---|---|
+| 1 | 通用 | Fabric API | `net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents` | present | present | PASS |
+| 2 | 通用 | Fabric API | `net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents$ModifyOutput` | present | present | PASS |
+| 3 | 通用 | Fabric API | `net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTabOutput` | present | present | PASS |
+| 4 | 通用 | Fabric API | `net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents` | absent | absent | PASS |
+| 5 | 通用 | Fabric API | `net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents` | present | present | PASS |
+| 6 | 通用 | Fabric API | `net.fabricmc.fabric.api.registry.FuelValueEvents` | absent | absent | PASS |
+| 7 | 通用 | Fabric API | `net.fabricmc.fabric.api.registry.CompostableRegistry` | absent | absent | PASS |
+| 8 | 通用 | Fabric API | `net.fabricmc.fabric.api.registry.FabricPotionBrewingBuilder` | absent | absent | PASS |
+| 9 | 通用 | Fabric API | `net.fabricmc.fabric.api.datagen.v1.provider.FabricBrewingProvider` | present | present | PASS |
+| 10 | 通用 | Fabric API | `net.fabricmc.fabric.api.registry.StrippableBlockRegistry` | absent | absent | PASS |
+| 11 | 通用 | Fabric API | `net.fabricmc.fabric.api.registry.TillableBlockRegistry` | absent | absent | PASS |
+| 12 | 通用 | Fabric API | `net.fabricmc.fabric.api.registry.FlattenableBlockRegistry` | absent | absent | PASS |
+| 13 | 通用 | Fabric API | `net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes` | present | present | PASS |
+| 14 | 通用 | Fabric API | `net.fabricmc.fabric.api.block.v1.FluidFlowEvents` | present | present | PASS |
+| 15 | 通用 | Fabric API | `net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback` | present | present | PASS |
+| 16 | 通用 | Fabric API | `net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents` | present | present | PASS |
+| 17 | 通用 | Fabric API | `net.fabricmc.fabric.api.event.player.UseBlockCallback` | present | present | PASS |
+| 18 | 通用 | Fabric API | `net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry` | present | present | PASS |
+| 19 | 通用 | Fabric API | `net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback` | present | present | PASS |
+| 20 | 通用 | Fabric API | `net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents` | present | present | PASS |
+| 21 | 通用 | Fabric API | `net.fabricmc.fabric.api.biome.v1.BiomeModifications` | present | present | PASS |
+| 22 | 通用 | Fabric API | `net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry` | present | present | PASS |
+| 23 | 通用 | Fabric API | `net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry` | present | present | PASS |
+| 24 | 通用 | Fabric API | `net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking` | present | present | PASS |
+| 25 | 通用 | Fabric API | `net.fabricmc.fabric.api.event.registry.RegistryAttributeHolder` | present | present | PASS |
+| 26 | 通用 | MC 本体 | `net/minecraft/world/item/Item.use` | present | present | PASS |
+| 27 | 通用 | MC 本体 | `net/minecraft/server/level/ServerLevel.addFreshEntity` | present | present | PASS |
+| 28 | 通用 | MC 本体 | `net/minecraft/world/level/Level.getBlockState` | present | present | PASS |
+| 29 | 通用 | MC 本体 | `net/minecraft/world/item/ItemStack.hurtAndBreak` | present | present | PASS |
+| 30 | 通用 | MC 本体 | `net/minecraft/world/item/Item.getCraftingRemainder` | present | present | PASS |
+| 31 | 通用 | MC 本体 | `net/minecraft/world/level/block/state/BlockState.isAir` | present | present | PASS |
+| 32 | 通用 | MC 本体 | `net/minecraft/world/level/block/EnchantingTableBlock.isValidBookShelf` | present | present | PASS |
+| 33 | 通用 | MC 本体 | `net/minecraft/world/entity/Entity.readAdditionalSaveData` | present | present | PASS |
+| 34 | 通用 | MC 本体 | `net/minecraft/world/entity/Entity.hurt` | present | no-evidence | UNPROVEN |
+| 35 | 通用 | MC 本体 | `net/minecraft/world/entity/Entity.hurtServer` | present | present(symbol) | PASS |
+| 36 | 通用 | MC 本体 | `net/minecraft/world/entity/Entity.killedEntity` | present | present | PASS |
+| 37 | 通用 | MC 本体 | `net/minecraft/world/item/ItemStack.addToTooltip` | present | present | PASS |
+| 38 | 通用 | MC 本体 | `net/minecraft/client/multiplayer/MultiPlayerGameMode.interact` | present | present | PASS |
+| 39 | 通用 | 符号探测 | `常量池符号 COOKING_FUEL` | info | absent | INFO |
+| 40 | 通用 | 符号探测 | `常量池符号 COMPOSTABLE` | info | present | INFO |
+| 41 | 通用 | 符号探测 | `常量池符号 BREWING_FUEL` | info | absent | INFO |
+| 42 | 通用 | 符号探测 | `常量池符号 getProvidedEnchantmentPower` | info | present | INFO |
+| 43 | 通用 | 符号探测 | `常量池符号 InputConstants` | info | present | INFO |
+| 44 | 服务端 | Fabric API | `net.fabricmc.api.DedicatedServerModInitializer` | present | present | PASS |
+| 45 | 通用 | Fabric API | `net.fabricmc.api.ModInitializer` | present | present | PASS |
+| 46 | 客户端 | Fabric API | `net.fabricmc.api.ClientModInitializer` | present | present | PASS |
+| 47 | 通用 | Fabric API | `net.fabricmc.api.EnvType` | present | present | PASS |
+| 48 | 通用 | Fabric API | `net.fabricmc.api.Environment` | present | present | PASS |
+| 49 | 服务端 | Fabric API | `net.fabricmc.loader.impl.launch.server.FabricServerLauncher` | present | present | PASS |
+| 50 | 服务端 | Fabric API | `net.fabricmc.loader.impl.launch.knot.KnotServer` | present | present | PASS |
+| 51 | 服务端 | Fabric API | `net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents` | present | present | PASS |
+| 52 | 服务端 | Fabric API | `net.fabricmc.fabric.api.event.lifecycle.v1.ServerLevelEvents` | present | present | PASS |
+| 53 | 服务端 | Fabric API | `net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents` | present | present | PASS |
+| 54 | 服务端 | Fabric API | `net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents` | present | present | PASS |
+| 55 | 服务端 | Fabric API | `net.fabricmc.fabric.api.event.lifecycle.v1.ServerBlockEntityEvents` | present | present | PASS |
+| 56 | 服务端 | Fabric API | `net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents` | present | present | PASS |
+| 57 | 服务端 | Fabric API | `net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents` | present | present | PASS |
+| 58 | 服务端 | Fabric API | `net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents` | present | present | PASS |
+| 59 | 服务端 | Fabric API | `net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking` | present | present | PASS |
+| 60 | 服务端 | Fabric API | `net.fabricmc.fabric.api.networking.v1.ServerConfigurationNetworking` | present | present | PASS |
+| 61 | 服务端 | Fabric API | `net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking` | present | present | PASS |
+| 62 | 服务端 | Fabric API | `net.fabricmc.fabric.api.message.v1.ServerMessageEvents` | present | present | PASS |
+| 63 | 服务端 | Fabric API | `net.fabricmc.fabric.api.resource.ResourceManagerHelper` | present | present | PASS |
+| 64 | 服务端 | MC 本体 | `net/minecraft/server/MinecraftServer.initServer` | present | present | PASS |
+| 65 | 服务端 | MC 本体 | `net/minecraft/server/MinecraftServer.tickChildren` | present | present | PASS |
+| 66 | 服务端 | MC 本体 | `net/minecraft/server/level/ServerPlayer.setRespawnPosition` | present | present | PASS |
+| 67 | 服务端 | MC 本体 | `net/minecraft/server/network/ServerGamePacketListenerImpl.send` | present | present | PASS |
+| 68 | 服务端 | MC 本体 | `net/minecraft/world/entity/Entity.teleportCrossDimension` | present | present | PASS |
 
 ## 逐条签名与证据
 
@@ -508,7 +533,7 @@
 
 - 预期：info　实测：**absent**　状态：**INFO**
 - 说明：26.3 燃料改用 DataComponents.COOKING_FUEL, 26.2 用 FuelRegistry 所以不该出现
-- 证据：全部 44 个子模块中未出现 "COOKING_FUEL"
+- 证据：全部 45 个子模块中未出现 "COOKING_FUEL"
 
 ### `symbol.compostable` — 常量池符号 COMPOSTABLE
 
@@ -525,7 +550,7 @@
 
 - 预期：info　实测：**absent**　状态：**INFO**
 - 说明：26.3 酿造燃料组件
-- 证据：全部 44 个子模块中未出现 "BREWING_FUEL"
+- 证据：全部 45 个子模块中未出现 "BREWING_FUEL"
 
 ### `symbol.enchantment_power` — 常量池符号 getProvidedEnchantmentPower
 
@@ -549,4 +574,365 @@
   fabric-creative-tab-api-v1-5.0.21+fcdff87f5d.jar!net.fabricmc.fabric.mixin.creativetab.client.CreativeModeInventoryScreenMixin
   fabric-key-mapping-api-v1-2.0.8+3434d6d95d.jar!net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper
   fabric-key-mapping-api-v1-2.0.8+3434d6d95d.jar!net.fabricmc.fabric.mixin.client.keymapping.KeyMappingAccessor
+  ```
+
+### `entrypoint.dedicated_server` — net.fabricmc.api.DedicatedServerModInitializer
+
+- 预期：present　实测：**present**　状态：**PASS**
+- 说明：服务端 mod 入口点, fabric.mod.json 的 "server" entrypoint 用这个
+- 证据：javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.api.DedicatedServerModInitializer
+- 实测签名：
+  ```
+  Compiled from "DedicatedServerModInitializer.java"
+  public interface net.fabricmc.api.DedicatedServerModInitializer {
+  public abstract void onInitializeServer();
+  }
+  ```
+
+### `entrypoint.main` — net.fabricmc.api.ModInitializer
+
+- 预期：present　实测：**present**　状态：**PASS**
+- 说明：通用入口点, 客户端服务端都跑
+- 证据：javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.api.ModInitializer
+- 实测签名：
+  ```
+  Compiled from "ModInitializer.java"
+  public interface net.fabricmc.api.ModInitializer {
+  public abstract void onInitialize();
+  }
+  ```
+
+### `entrypoint.client` — net.fabricmc.api.ClientModInitializer
+
+- 预期：present　实测：**present**　状态：**PASS**
+- 说明：对照用: 客户端入口点, 服务端 mod 别用
+- 证据：javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.api.ClientModInitializer
+- 实测签名：
+  ```
+  Compiled from "ClientModInitializer.java"
+  public interface net.fabricmc.api.ClientModInitializer {
+  public abstract void onInitializeClient();
+  }
+  ```
+
+### `api.envtype` — net.fabricmc.api.EnvType
+
+- 预期：present　实测：**present**　状态：**PASS**
+- 说明：EnvType.SERVER, 配合 @Environment 使用
+- 证据：javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.api.EnvType
+- 实测签名：
+  ```
+  Compiled from "EnvType.java"
+  public final class net.fabricmc.api.EnvType extends java.lang.Enum<net.fabricmc.api.EnvType> {
+  public static final net.fabricmc.api.EnvType CLIENT;
+  public static final net.fabricmc.api.EnvType SERVER;
+  public static net.fabricmc.api.EnvType[] values();
+  public static net.fabricmc.api.EnvType valueOf(java.lang.String);
+  static {};
+  }
+  ```
+
+### `api.environment` — net.fabricmc.api.Environment
+
+- 预期：present　实测：**present**　状态：**PASS**
+- 说明：@Environment(EnvType.SERVER) 注解
+- 证据：javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.api.Environment
+- 实测签名：
+  ```
+  Compiled from "Environment.java"
+  public interface net.fabricmc.api.Environment extends java.lang.annotation.Annotation {
+  public abstract net.fabricmc.api.EnvType value();
+  }
+  ```
+
+### `loader.server.launcher` — net.fabricmc.loader.impl.launch.server.FabricServerLauncher
+
+- 预期：present　实测：**present**　状态：**PASS**
+- 说明：loader jar 的 Main-Class, 服务端启动入口
+- 证据：javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.loader.impl.launch.server.FabricServerLauncher
+- 实测签名：
+  ```
+  Compiled from "FabricServerLauncher.java"
+  public class net.fabricmc.loader.impl.launch.server.FabricServerLauncher {
+  public net.fabricmc.loader.impl.launch.server.FabricServerLauncher();
+  public static void main(java.lang.String[]);
+  static {};
+  }
+  ```
+
+### `loader.knot.server` — net.fabricmc.loader.impl.launch.knot.KnotServer
+
+- 预期：present　实测：**present**　状态：**PASS**
+- 说明：服务端 Knot 启动器
+- 证据：javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.loader.impl.launch.knot.KnotServer
+- 实测签名：
+  ```
+  Compiled from "KnotServer.java"
+  public class net.fabricmc.loader.impl.launch.knot.KnotServer {
+  public net.fabricmc.loader.impl.launch.knot.KnotServer();
+  public static void main(java.lang.String[]);
+  }
+  ```
+
+### `server.lifecycle` — net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
+
+- 预期：present　实测：**present**　状态：**PASS**
+- 说明：服务端启停
+- 证据：javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
+- 实测签名：
+  ```
+  Compiled from "ServerLifecycleEvents.java"
+  public final class net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents {
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$ServerStarting> SERVER_STARTING;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$ServerStarted> SERVER_STARTED;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$ServerStopping> SERVER_STOPPING;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$ServerStopped> SERVER_STOPPED;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$SyncDataPackContents> SYNC_DATA_PACK_CONTENTS;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$StartDataPackReload> START_DATA_PACK_RELOAD;
+  ```
+
+### `server.level.events` — net.fabricmc.fabric.api.event.lifecycle.v1.ServerLevelEvents
+
+- 预期：present　实测：**present**　状态：**PASS**
+- 说明：维度加载/卸载
+- 证据：javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.fabric.api.event.lifecycle.v1.ServerLevelEvents
+- 实测签名：
+  ```
+  Compiled from "ServerLevelEvents.java"
+  public final class net.fabricmc.fabric.api.event.lifecycle.v1.ServerLevelEvents {
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerLevelEvents$Load> LOAD;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerLevelEvents$Unload> UNLOAD;
+  static {};
+  }
+  ```
+
+### `server.chunk.events` — net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents
+
+- 预期：present　实测：**present**　状态：**PASS**
+- 说明：区块事件
+- 证据：javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents
+- 实测签名：
+  ```
+  Compiled from "ServerChunkEvents.java"
+  public final class net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents {
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents$Load> CHUNK_LOAD;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents$Generate> CHUNK_GENERATE;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents$Unload> CHUNK_UNLOAD;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents$FullChunkStatusChange> FULL_CHUNK_STATUS_CHANGE;
+  static {};
+  }
+  ```
+
+### `server.entity.events` — net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents
+
+- 预期：present　实测：**present**　状态：**PASS**
+- 说明：实体进出世界
+- 证据：javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents
+- 实测签名：
+  ```
+  Compiled from "ServerEntityEvents.java"
+  public final class net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents {
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents$Load> ENTITY_LOAD;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents$AllowLoad> ALLOW_LOAD;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents$Unload> ENTITY_UNLOAD;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents$EquipmentChange> EQUIPMENT_CHANGE;
+  static {};
+  }
+  ```
+
+### `server.blockentity.events` — net.fabricmc.fabric.api.event.lifecycle.v1.ServerBlockEntityEvents
+
+- 预期：present　实测：**present**　状态：**PASS**
+- 说明：方块实体事件
+- 证据：javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.fabric.api.event.lifecycle.v1.ServerBlockEntityEvents
+- 实测签名：
+  ```
+  Compiled from "ServerBlockEntityEvents.java"
+  public final class net.fabricmc.fabric.api.event.lifecycle.v1.ServerBlockEntityEvents {
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerBlockEntityEvents$Load> BLOCK_ENTITY_LOAD;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerBlockEntityEvents$Unload> BLOCK_ENTITY_UNLOAD;
+  static {};
+  }
+  ```
+
+### `server.player.events` — net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents
+
+- 预期：present　实测：**present**　状态：**PASS**
+- 说明：玩家复制/重生
+- 证据：javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents
+- 实测签名：
+  ```
+  Compiled from "ServerPlayerEvents.java"
+  public final class net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents {
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents$CopyFrom> COPY_FROM;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents$AfterRespawn> AFTER_RESPAWN;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents$Join> JOIN;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents$Leave> LEAVE;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents$AllowDeath> ALLOW_DEATH;
+  static {};
+  ```
+
+### `server.entity.combat` — net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
+
+- 预期：present　实测：**present**　状态：**PASS**
+- 说明：击杀回调
+- 证据：javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
+- 实测签名：
+  ```
+  Compiled from "ServerEntityCombatEvents.java"
+  public final class net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents {
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents$AfterKilledOtherEntity> AFTER_KILLED_OTHER_ENTITY;
+  static {};
+  }
+  ```
+
+### `server.play.connection` — net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
+
+- 预期：present　实测：**present**　状态：**PASS**
+- 说明：玩家进/出服
+- 证据：javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
+- 实测签名：
+  ```
+  Compiled from "ServerPlayConnectionEvents.java"
+  public final class net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents {
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents$Init> INIT;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents$Join> JOIN;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents$Disconnect> DISCONNECT;
+  static {};
+  }
+  ```
+
+### `server.play.networking` — net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
+
+- 预期：present　实测：**present**　状态：**PASS**
+- 说明：Play 阶段收发包
+- 证据：javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
+- 实测签名：
+  ```
+  Compiled from "ServerPlayNetworking.java"
+  public final class net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking {
+  public static <T extends net.minecraft.network.protocol.common.custom.CustomPacketPayload> boolean registerGlobalReceiver(net.minecraft.network.protocol.common.custom.CustomPacketPayload$Type<T>, net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking$PlayPayloadHandler<T>);
+  public static net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking$PlayPayloadHandler<?> unregisterGlobalReceiver(net.minecraft.resources.Identifier);
+  public static java.util.Set<net.minecraft.resources.Identifier> getGlobalReceivers();
+  public static <T extends net.minecraft.network.protocol.common.custom.CustomPacketPayload> boolean registerReceiver(net.minecraft.server.network.ServerGamePacketListenerImpl, net.minecraft.network.protocol.common.custom.CustomPacketPayload$Type<T>, net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking$PlayPayloadHandler<T>);
+  public static net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking$PlayPayloadHandler<?> unregisterReceiver(net.minecraft.server.network.ServerGamePacketListenerImpl, net.minecraft.resources.Identifier);
+  public static java.util.Set<net.minecraft.resources.Identifier> getReceived(net.minecraft.server.level.ServerPlayer);
+  ```
+
+### `server.configuration.networking` — net.fabricmc.fabric.api.networking.v1.ServerConfigurationNetworking
+
+- 预期：present　实测：**present**　状态：**PASS**
+- 说明：Configuration 阶段收发包
+- 证据：javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.fabric.api.networking.v1.ServerConfigurationNetworking
+- 实测签名：
+  ```
+  Compiled from "ServerConfigurationNetworking.java"
+  public final class net.fabricmc.fabric.api.networking.v1.ServerConfigurationNetworking {
+  public static <T extends net.minecraft.network.protocol.common.custom.CustomPacketPayload> boolean registerGlobalReceiver(net.minecraft.network.protocol.common.custom.CustomPacketPayload$Type<T>, net.fabricmc.fabric.api.networking.v1.ServerConfigurationNetworking$ConfigurationPacketHandler<T>);
+  public static net.fabricmc.fabric.api.networking.v1.ServerConfigurationNetworking$ConfigurationPacketHandler<?> unregisterGlobalReceiver(net.minecraft.resources.Identifier);
+  public static java.util.Set<net.minecraft.resources.Identifier> getGlobalReceivers();
+  public static <T extends net.minecraft.network.protocol.common.custom.CustomPacketPayload> boolean registerReceiver(net.minecraft.server.network.ServerConfigurationPacketListenerImpl, net.minecraft.network.protocol.common.custom.CustomPacketPayload$Type<T>, net.fabricmc.fabric.api.networking.v1.ServerConfigurationNetworking$ConfigurationPacketHandler<T>);
+  public static net.fabricmc.fabric.api.networking.v1.ServerConfigurationNetworking$ConfigurationPacketHandler<?> unregisterReceiver(net.minecraft.server.network.ServerConfigurationPacketListenerImpl, net.minecraft.resources.Identifier);
+  public static java.util.Set<net.minecraft.resources.Identifier> getReceived(net.minecraft.server.network.ServerConfigurationPacketListenerImpl);
+  ```
+
+### `server.login.networking` — net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking
+
+- 预期：present　实测：**present**　状态：**PASS**
+- 说明：Login 阶段查询/应答
+- 证据：javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking
+- 实测签名：
+  ```
+  Compiled from "ServerLoginNetworking.java"
+  public final class net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking {
+  public static boolean registerGlobalReceiver(net.minecraft.resources.Identifier, net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking$LoginQueryResponseHandler);
+  public static net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking$LoginQueryResponseHandler unregisterGlobalReceiver(net.minecraft.resources.Identifier);
+  public static java.util.Set<net.minecraft.resources.Identifier> getGlobalReceivers();
+  public static boolean registerReceiver(net.minecraft.server.network.ServerLoginPacketListenerImpl, net.minecraft.resources.Identifier, net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking$LoginQueryResponseHandler);
+  public static net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking$LoginQueryResponseHandler unregisterReceiver(net.minecraft.server.network.ServerLoginPacketListenerImpl, net.minecraft.resources.Identifier);
+  public static net.minecraft.server.MinecraftServer getServer(net.minecraft.server.network.ServerLoginPacketListenerImpl);
+  ```
+
+### `server.message.events` — net.fabricmc.fabric.api.message.v1.ServerMessageEvents
+
+- 预期：present　实测：**present**　状态：**PASS**
+- 说明：聊天消息拦截
+- 证据：javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.fabric.api.message.v1.ServerMessageEvents
+- 实测签名：
+  ```
+  Compiled from "ServerMessageEvents.java"
+  public final class net.fabricmc.fabric.api.message.v1.ServerMessageEvents {
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.message.v1.ServerMessageEvents$AllowChatMessage> ALLOW_CHAT_MESSAGE;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.message.v1.ServerMessageEvents$AllowGameMessage> ALLOW_GAME_MESSAGE;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.message.v1.ServerMessageEvents$AllowCommandMessage> ALLOW_COMMAND_MESSAGE;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.message.v1.ServerMessageEvents$ChatMessage> CHAT_MESSAGE;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.message.v1.ServerMessageEvents$GameMessage> GAME_MESSAGE;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.message.v1.ServerMessageEvents$CommandMessage> COMMAND_MESSAGE;
+  ```
+
+### `server.resource.helper` — net.fabricmc.fabric.api.resource.ResourceManagerHelper
+
+- 预期：present　实测：**present**　状态：**PASS**
+- 说明：挂 reload listener / 内置资源包
+- 证据：javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.fabric.api.resource.ResourceManagerHelper
+- 实测签名：
+  ```
+  Compiled from "ResourceManagerHelper.java"
+  public interface net.fabricmc.fabric.api.resource.ResourceManagerHelper {
+  public default void addReloadListener(net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener);
+  public abstract void registerReloadListener(net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener);
+  public abstract void registerReloadListener(net.minecraft.resources.Identifier, java.util.function.Function<net.minecraft.core.HolderLookup$Provider, net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener>);
+  public static net.fabricmc.fabric.api.resource.ResourceManagerHelper get(net.minecraft.server.packs.PackType);
+  public static boolean registerBuiltinResourcePack(net.minecraft.resources.Identifier, net.fabricmc.loader.api.ModContainer, net.fabricmc.fabric.api.resource.ResourcePackActivationType);
+  public static boolean registerBuiltinResourcePack(net.minecraft.resources.Identifier, net.fabricmc.loader.api.ModContainer, net.minecraft.network.chat.Component, net.fabricmc.fabric.api.resource.ResourcePackActivationType);
+  ```
+
+### `mc.minecraftserver.initserver` — net/minecraft/server/MinecraftServer.initServer
+
+- 预期：present　实测：**present**　状态：**PASS**
+- 说明：服务端初始化
+- 证据：mixin 注解 target=Lnet/minecraft/server/MinecraftServer;initServer()Z (来自 net.fabricmc.fabric.mixin.event.lifecycle.MinecraftServerMixin)
+- 实测签名：
+  ```
+  Lnet/minecraft/server/MinecraftServer;initServer()Z
+  ```
+
+### `mc.minecraftserver.tickchildren` — net/minecraft/server/MinecraftServer.tickChildren
+
+- 预期：present　实测：**present**　状态：**PASS**
+- 说明：tick 子维度
+- 证据：mixin 注解 target=Lnet/minecraft/server/MinecraftServer;tickChildren(Ljava/util/function/BooleanSupplier;)V (来自 net.fabricmc.fabric.mixin.event.lifecycle.MinecraftServerMixin)
+- 实测签名：
+  ```
+  Lnet/minecraft/server/MinecraftServer;tickChildren(Ljava/util/function/BooleanSupplier;)V
+  ```
+
+### `mc.serverplayer.setrespawnposition` — net/minecraft/server/level/ServerPlayer.setRespawnPosition
+
+- 预期：present　实测：**present**　状态：**PASS**
+- 说明：设置重生点
+- 证据：mixin 注解 target=Lnet/minecraft/server/level/ServerPlayer;setRespawnPosition(Lnet/minecraft/server/level/ServerPlayer$RespawnConfig;Z)V (来自 net.fabricmc.fabric.mixin.entity.event.ServerPlayerMixin)
+- 实测签名：
+  ```
+  Lnet/minecraft/server/level/ServerPlayer;setRespawnPosition(Lnet/minecraft/server/level/ServerPlayer$RespawnConfig;Z)V
+  ```
+
+### `mc.servergamepacketlistener.send` — net/minecraft/server/network/ServerGamePacketListenerImpl.send
+
+- 预期：present　实测：**present**　状态：**PASS**
+- 说明：给单个玩家发包
+- 证据：mixin 注解 target=Lnet/minecraft/server/network/ServerGamePacketListenerImpl;send(Lnet/minecraft/network/protocol/Packet;)V (来自 net.fabricmc.fabric.mixin.menu.ServerPlayerMixin)
+- 实测签名：
+  ```
+  Lnet/minecraft/server/network/ServerGamePacketListenerImpl;send(Lnet/minecraft/network/protocol/Packet;)V
+  ```
+
+### `mc.entity.teleportcrossdimension` — net/minecraft/world/entity/Entity.teleportCrossDimension
+
+- 预期：present　实测：**present**　状态：**PASS**
+- 说明：跨维度传送
+- 证据：mixin 注解 target=Lnet/minecraft/world/entity/Entity;teleportCrossDimension(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/level/portal/TeleportTransition;)Lnet/minecraft/world/entity/Entity; (来自 net.fabricmc.fabric.mixin.entity.event.EntityMixin)
+- 实测签名：
+  ```
+  Lnet/minecraft/world/entity/Entity;teleportCrossDimension(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/level/portal/TeleportTransition;)Lnet/minecraft/world/entity/Entity;
   ```

@@ -21,6 +21,7 @@ import glob
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import zipfile
@@ -169,6 +170,95 @@ CATALOG = [
          note='26.3 客户端 GLFW→SDL 迁移后按键常量应走这个类'),
 ]
 
+# ---------------------------------------------------------------- 服务端条目
+# side: server=只在服务端 / client=只在客户端 / both=通用
+SERVER_CATALOG = [
+    # ---- 入口点(在 loader 里, 不在 fabric-api 里) ----
+    dict(id='entrypoint.dedicated_server', kind='fabric', side='server',
+         name='net.fabricmc.api.DedicatedServerModInitializer',
+         must_have=['onInitializeServer'],
+         note='服务端 mod 入口点, fabric.mod.json 的 "server" entrypoint 用这个'),
+    dict(id='entrypoint.main', kind='fabric', side='both',
+         name='net.fabricmc.api.ModInitializer', must_have=['onInitialize'],
+         note='通用入口点, 客户端服务端都跑'),
+    dict(id='entrypoint.client', kind='fabric', side='client',
+         name='net.fabricmc.api.ClientModInitializer', must_have=['onInitializeClient'],
+         note='对照用: 客户端入口点, 服务端 mod 别用'),
+    dict(id='api.envtype', kind='fabric', side='both',
+         name='net.fabricmc.api.EnvType', must_have=['SERVER', 'CLIENT'],
+         note='EnvType.SERVER, 配合 @Environment 使用'),
+    dict(id='api.environment', kind='fabric', side='both',
+         name='net.fabricmc.api.Environment', note='@Environment(EnvType.SERVER) 注解'),
+    dict(id='loader.server.launcher', kind='fabric', side='server',
+         name='net.fabricmc.loader.impl.launch.server.FabricServerLauncher',
+         must_have=['main'],
+         note='loader jar 的 Main-Class, 服务端启动入口'),
+    dict(id='loader.knot.server', kind='fabric', side='server',
+         name='net.fabricmc.loader.impl.launch.knot.KnotServer',
+         note='服务端 Knot 启动器'),
+    # ---- 服务端生命周期 ----
+    dict(id='server.lifecycle', kind='fabric', side='server',
+         name='net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents',
+         must_have=['SERVER_STARTING', 'SERVER_STARTED', 'SERVER_STOPPING', 'SERVER_STOPPED'],
+         note='服务端启停'),
+    dict(id='server.level.events', kind='fabric', side='server',
+         name='net.fabricmc.fabric.api.event.lifecycle.v1.ServerLevelEvents',
+         must_have=['LOAD', 'UNLOAD'], note='维度加载/卸载'),
+    dict(id='server.chunk.events', kind='fabric', side='server',
+         name='net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents',
+         must_have=['CHUNK_LOAD', 'CHUNK_UNLOAD'], note='区块事件'),
+    dict(id='server.entity.events', kind='fabric', side='server',
+         name='net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents',
+         must_have=['ENTITY_LOAD', 'ENTITY_UNLOAD'], note='实体进出世界'),
+    dict(id='server.blockentity.events', kind='fabric', side='server',
+         name='net.fabricmc.fabric.api.event.lifecycle.v1.ServerBlockEntityEvents',
+         must_have=['BLOCK_ENTITY_LOAD'], note='方块实体事件'),
+    dict(id='server.player.events', kind='fabric', side='server',
+         name='net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents',
+         must_have=['COPY_FROM', 'AFTER_RESPAWN'], note='玩家复制/重生'),
+    dict(id='server.entity.combat', kind='fabric', side='server',
+         name='net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents',
+         must_have=['AFTER_KILLED_OTHER_ENTITY'], note='击杀回调'),
+    # ---- 服务端网络 ----
+    dict(id='server.play.connection', kind='fabric', side='server',
+         name='net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents',
+         must_have=['INIT', 'JOIN', 'DISCONNECT'], note='玩家进/出服'),
+    dict(id='server.play.networking', kind='fabric', side='server',
+         name='net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking',
+         must_have=['registerGlobalReceiver', 'canSend', 'send'], note='Play 阶段收发包'),
+    dict(id='server.configuration.networking', kind='fabric', side='server',
+         name='net.fabricmc.fabric.api.networking.v1.ServerConfigurationNetworking',
+         must_have=['registerGlobalReceiver', 'send'], note='Configuration 阶段收发包'),
+    dict(id='server.login.networking', kind='fabric', side='server',
+         name='net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking',
+         must_have=['registerGlobalReceiver'], note='Login 阶段查询/应答'),
+    dict(id='server.message.events', kind='fabric', side='server',
+         name='net.fabricmc.fabric.api.message.v1.ServerMessageEvents',
+         must_have=['ALLOW_CHAT_MESSAGE', 'CHAT_MESSAGE'], note='聊天消息拦截'),
+    # ---- 服务端资源 ----
+    dict(id='server.resource.helper', kind='fabric', side='server',
+         name='net.fabricmc.fabric.api.resource.ResourceManagerHelper',
+         must_have=['registerReloadListener', 'get'], note='挂 reload listener / 内置资源包'),
+    # ---- MC 本体服务端(来自 mixin 证据) ----
+    dict(id='mc.minecraftserver.initserver', kind='mojang', side='server',
+         owner='net/minecraft/server/MinecraftServer', method='initServer',
+         note='服务端初始化'),
+    dict(id='mc.minecraftserver.tickchildren', kind='mojang', side='server',
+         owner='net/minecraft/server/MinecraftServer', method='tickChildren',
+         note='tick 子维度'),
+    dict(id='mc.serverplayer.setrespawnposition', kind='mojang', side='server',
+         owner='net/minecraft/server/level/ServerPlayer', method='setRespawnPosition',
+         note='设置重生点'),
+    dict(id='mc.servergamepacketlistener.send', kind='mojang', side='server',
+         owner='net/minecraft/server/network/ServerGamePacketListenerImpl', method='send',
+         note='给单个玩家发包'),
+    dict(id='mc.entity.teleportcrossdimension', kind='mojang', side='server',
+         owner='net/minecraft/world/entity/Entity', method='teleportCrossDimension',
+         note='跨维度传送'),
+]
+
+CATALOG = CATALOG + SERVER_CATALOG
+
 
 def find_jdk():
     for p in sorted(glob.glob('/data/workspace/jdk-25*/')) + sorted(glob.glob(f'{WORK}/jdk-25*/')):
@@ -178,15 +268,30 @@ def find_jdk():
 
 
 def prepare_cp(version, jar):
-    """把 jar-in-jar 子模块摊平到一个 classpath 目录"""
+    """把 jar-in-jar 子模块摊平到一个 classpath 目录
+
+    额外把 toolchain/ 里的 fabric-loader 也放进去 —— 服务端的入口点
+    (DedicatedServerModInitializer / EnvType / FabricServerLauncher) 在 loader 里,
+    不在 fabric-api 里, 不加就查不到。
+    """
     out = f'{WORK}/cp_{version}'
-    if os.path.isdir(out) and glob.glob(out + '/*.jar'):
+    cached = os.path.isdir(out) and glob.glob(out + '/*.jar')
+    if cached:
+        # 目录是缓存的, 但 loader jar 可能是后来才加进来的, 补齐再返回
+        for ld in glob.glob(f'{ROOT}/toolchain/fabric-loader-*.jar'):
+            dst = os.path.join(out, '_loader-' + os.path.basename(ld))
+            if not os.path.exists(dst):
+                shutil.copy2(ld, dst)
         return out
     os.makedirs(out, exist_ok=True)
     z = zipfile.ZipFile(jar)
     for n in z.namelist():
         if n.startswith('META-INF/jars/') and n.endswith('.jar'):
             open(os.path.join(out, n.split('/')[-1]), 'wb').write(z.read(n))
+    for ld in glob.glob(f'{ROOT}/toolchain/fabric-loader-*.jar'):
+        dst = os.path.join(out, '_loader-' + os.path.basename(ld))
+        if not os.path.exists(dst):
+            shutil.copy2(ld, dst)
     return out
 
 
@@ -257,7 +362,7 @@ def run(version, jdk):
         else:
             disp = item.get('name') or f"{item.get('owner')}.{item.get('method')}"
         row = dict(id=item['id'], kind=item['kind'], note=item.get('note', ''),
-                   expect=expect, name=disp)
+                   expect=expect, name=disp, side=item.get('side', 'both'))
         if item['kind'] == 'fabric':
             out, err = javap(jdk, cp, item['name'])
             if 'class not found' in err or 'Error:' in err:
@@ -334,8 +439,9 @@ def write_table(version, rows, jar, nev):
           '- 符号探测条目：在全部子模块的 class 常量池里搜字节串，看该 MC 符号是否被 Fabric 代码引用'
           '（**只能证明"被引用"，不能证明"不存在"**，故只做记录不做断言）。',
           '',
-          f'| # | 类别 | API | 预期 | 实测 | 状态 |',
-          f'|---|---|---|---|---|---|']
+          f'| # | 端 | 类别 | API | 预期 | 实测 | 状态 |',
+          f'|---|---|---|---|---|---|---|']
+    SIDE_CN = {'server': '服务端', 'client': '客户端', 'both': '通用'}
     for i, r in enumerate(rows, 1):
         sig = r['signature']
         if isinstance(sig, list):
@@ -343,7 +449,7 @@ def write_table(version, rows, jar, nev):
         else:
             shown = sig or '—'
         kind_cn = {'fabric': 'Fabric API', 'mojang': 'MC 本体', 'symbol': '符号探测'}[r['kind']]
-        md.append(f"| {i} | {kind_cn} | "
+        md.append(f"| {i} | {SIDE_CN[r['side']]} | {kind_cn} | "
                   f"`{r['name']}` | {r['expect']} | {r['result']} | {verdict(r)} |")
     md += ['', '## 逐条签名与证据', '']
     for r in rows:
@@ -369,6 +475,9 @@ def write_table(version, rows, jar, nev):
     return data
 
 
+SIDE_CN = {'server': '服务端', 'client': '客户端', 'both': '通用'}
+
+
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith('--')]
     jdk = find_jdk()
@@ -391,7 +500,14 @@ def main():
             print(f"  {st}  {r['id']:34s} {r['expect']:7s} -> {r['result']:7s}{extra}")
         npass = sum(1 for r in rows if verdict(r) == 'PASS')
         nun = sum(1 for r in rows if verdict(r) == 'UNPROVEN')
-        print(f'  ---- {v}: {npass}/{len(rows)} PASS, {nun} UNPROVEN (证据未采集到)')
+        byside = {}
+        for r in rows:
+            d = byside.setdefault(r['side'], [0, 0])
+            d[0] += 1
+            if verdict(r) == 'PASS':
+                d[1] += 1
+        side_txt = '  '.join(f"{SIDE_CN[k]} {c[1]}/{c[0]}" for k, c in byside.items())
+        print(f'  ---- {v}: {npass}/{len(rows)} PASS, {nun} UNPROVEN  |  {side_txt}')
     if len(versions) == 2:
         print('\n===== 26.2 vs 26.3 差异 =====')
         a = {r['id']: r for r in datas['26.2']['entries']}

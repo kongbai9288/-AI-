@@ -10,6 +10,7 @@
    "note": "26.x 的物品栏事件入口",
    "expect": "present",
    "name": "net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents",
+   "side": "both",
    "result": "present",
    "signature": [
     "Compiled from \"CreativeModeTabEvents.java\"",
@@ -29,6 +30,7 @@
    "note": "回调接口",
    "expect": "present",
    "name": "net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents$ModifyOutput",
+   "side": "both",
    "result": "present",
    "signature": [
     "Compiled from \"CreativeModeTabEvents.java\"",
@@ -46,6 +48,7 @@
    "note": "往物品栏塞物品",
    "expect": "present",
    "name": "net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTabOutput",
+   "side": "both",
    "result": "present",
    "signature": [
     "Compiled from \"FabricCreativeModeTabOutput.java\"",
@@ -91,6 +94,7 @@
    "note": "旧教程里的写法, 实测应当已不存在",
    "expect": "absent",
    "name": "net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents",
+   "side": "both",
    "result": "absent",
    "signature": "",
    "evidence": "javap: class not found",
@@ -102,6 +106,7 @@
    "note": "给原版/别家物品挂组件",
    "expect": "present",
    "name": "net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents",
+   "side": "both",
    "result": "present",
    "signature": [
     "Compiled from \"DefaultItemComponentEvents.java\"",
@@ -120,6 +125,7 @@
    "note": "燃料值事件 (26.3 改 DataComponents.COOKING_FUEL)",
    "expect": "absent",
    "name": "net.fabricmc.fabric.api.registry.FuelValueEvents",
+   "side": "both",
    "result": "absent",
    "signature": "",
    "evidence": "javap: class not found",
@@ -131,6 +137,7 @@
    "note": "堆肥注册 (26.3 改 DataComponents.COMPOSTABLE)",
    "expect": "absent",
    "name": "net.fabricmc.fabric.api.registry.CompostableRegistry",
+   "side": "both",
    "result": "absent",
    "signature": "",
    "evidence": "javap: class not found",
@@ -142,6 +149,7 @@
    "note": "酿造配方构建器 (26.3 移除)",
    "expect": "absent",
    "name": "net.fabricmc.fabric.api.registry.FabricPotionBrewingBuilder",
+   "side": "both",
    "result": "absent",
    "signature": "",
    "evidence": "javap: class not found",
@@ -153,6 +161,7 @@
    "note": "26.3 的酿造 datagen provider",
    "expect": "present",
    "name": "net.fabricmc.fabric.api.datagen.v1.provider.FabricBrewingProvider",
+   "side": "both",
    "result": "present",
    "signature": [
     "Compiled from \"FabricBrewingProvider.java\"",
@@ -172,6 +181,7 @@
    "note": "斧头去皮",
    "expect": "absent",
    "name": "net.fabricmc.fabric.api.registry.StrippableBlockRegistry",
+   "side": "both",
    "result": "absent",
    "signature": "",
    "evidence": "javap: class not found",
@@ -183,6 +193,7 @@
    "note": "锄头耕地",
    "expect": "absent",
    "name": "net.fabricmc.fabric.api.registry.TillableBlockRegistry",
+   "side": "both",
    "result": "absent",
    "signature": "",
    "evidence": "javap: class not found",
@@ -194,6 +205,7 @@
    "note": "铲子铲平",
    "expect": "absent",
    "name": "net.fabricmc.fabric.api.registry.FlattenableBlockRegistry",
+   "side": "both",
    "result": "absent",
    "signature": "",
    "evidence": "javap: class not found",
@@ -205,6 +217,7 @@
    "note": "流体名称/颜色; 26.2 的 enableColoredVanillaFluidNames 在 26.3 换成 getColoredName",
    "expect": "present",
    "name": "net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes",
+   "side": "both",
    "result": "present",
    "signature": [
     "Compiled from \"FluidVariantAttributes.java\"",
@@ -235,6 +248,7 @@
    "note": "流体流动回调",
    "expect": "present",
    "name": "net.fabricmc.fabric.api.block.v1.FluidFlowEvents",
+   "side": "both",
    "result": "present",
    "signature": [
     "Compiled from \"FluidFlowEvents.java\"",
@@ -253,6 +267,7 @@
    "note": "注册命令",
    "expect": "present",
    "name": "net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback",
+   "side": "both",
    "result": "present",
    "signature": [
     "Compiled from \"CommandRegistrationCallback.java\"",
@@ -272,6 +287,7 @@
    "note": "服务端 tick (旧教程的 END_WORLD_TICK 已改名)",
    "expect": "present",
    "name": "net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents",
+   "side": "both",
    "result": "present",
    "signature": [
     "Compiled from \"ServerTickEvents.java\"",
@@ -293,6 +309,7 @@
    "note": "右键方块",
    "expect": "present",
    "name": "net.fabricmc.fabric.api.event.player.UseBlockCallback",
+   "side": "both",
    "result": "present",
    "signature": [
     "Compiled from \"UseBlockCallback.java\"",
@@ -312,6 +329,7 @@
    "note": "客户端渲染注册",
    "expect": "present",
    "name": "net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry",
+   "side": "both",
    "result": "present",
    "signature": [
     "Compiled from \"EntityRendererRegistry.java\"",
@@ -329,6 +347,7 @@
    "note": "tooltip 追加",
    "expect": "present",
    "name": "net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback",
+   "side": "both",
    "result": "present",
    "signature": [
     "Compiled from \"ItemTooltipCallback.java\"",
@@ -348,6 +367,7 @@
    "note": "生物死亡/受伤事件",
    "expect": "present",
    "name": "net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents",
+   "side": "both",
    "result": "present",
    "signature": [
     "Compiled from \"ServerLivingEntityEvents.java\"",
@@ -370,6 +390,7 @@
    "note": "加生物生成",
    "expect": "present",
    "name": "net.fabricmc.fabric.api.biome.v1.BiomeModifications",
+   "side": "both",
    "result": "present",
    "signature": [
     "Compiled from \"BiomeModifications.java\"",
@@ -390,6 +411,7 @@
    "note": "数据挂载 (新 API)",
    "expect": "present",
    "name": "net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry",
+   "side": "both",
    "result": "present",
    "signature": [
     "Compiled from \"AttachmentRegistry.java\"",
@@ -411,6 +433,7 @@
    "note": "自定义包类型 (旧名 playS2C 已改)",
    "expect": "present",
    "name": "net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry",
+   "side": "both",
    "result": "present",
    "signature": [
     "Compiled from \"PayloadTypeRegistry.java\"",
@@ -434,6 +457,7 @@
    "note": "发包给客户端",
    "expect": "present",
    "name": "net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking",
+   "side": "both",
    "result": "present",
    "signature": [
     "Compiled from \"ServerPlayNetworking.java\"",
@@ -469,6 +493,7 @@
    "note": "注册表属性",
    "expect": "present",
    "name": "net.fabricmc.fabric.api.event.registry.RegistryAttributeHolder",
+   "side": "both",
    "result": "present",
    "signature": [
     "Compiled from \"RegistryAttributeHolder.java\"",
@@ -489,6 +514,7 @@
    "note": "物品右键 (guide 里的写法靠这条验证)",
    "expect": "present",
    "name": "net/minecraft/world/item/Item.use",
+   "side": "both",
    "result": "present",
    "signature": [
     "Lnet/minecraft/world/item/Item;use(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;"
@@ -502,6 +528,7 @@
    "note": "生成实体, 只有 ServerLevel 有",
    "expect": "present",
    "name": "net/minecraft/server/level/ServerLevel.addFreshEntity",
+   "side": "both",
    "result": "present",
    "signature": [
     "Lnet/minecraft/server/level/ServerLevel;addFreshEntity(Lnet/minecraft/world/entity/Entity;)Z"
@@ -515,6 +542,7 @@
    "note": "取方块状态",
    "expect": "present",
    "name": "net/minecraft/world/level/Level.getBlockState",
+   "side": "both",
    "result": "present",
    "signature": [
     "Lnet/minecraft/world/level/Level;getBlockState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;"
@@ -528,6 +556,7 @@
    "note": "物品耐久消耗, 26.x 带 ServerLevel 参数",
    "expect": "present",
    "name": "net/minecraft/world/item/ItemStack.hurtAndBreak",
+   "side": "both",
    "result": "present",
    "signature": [
     "Lnet/minecraft/world/item/ItemStack;hurtAndBreak(ILnet/minecraft/server/level/ServerLevel;Lnet/minecraft/server/level/ServerPlayer;Ljava/util/function/Consumer;)V"
@@ -541,6 +570,7 @@
    "note": "合成剩余物, 26.2→26.3 返回类型有变化",
    "expect": "present",
    "name": "net/minecraft/world/item/Item.getCraftingRemainder",
+   "side": "both",
    "result": "present",
    "signature": [
     "Lnet/minecraft/world/item/Item;getCraftingRemainder()Lnet/minecraft/world/item/ItemStackTemplate;"
@@ -554,6 +584,7 @@
    "note": "是否空气",
    "expect": "present",
    "name": "net/minecraft/world/level/block/state/BlockState.isAir",
+   "side": "both",
    "result": "present",
    "signature": [
     "Lnet/minecraft/world/level/block/state/BlockState;isAir()Z"
@@ -567,6 +598,7 @@
    "note": "书架判定, 26.3 新增 getProvidedEnchantmentPower 的相关路径",
    "expect": "present",
    "name": "net/minecraft/world/level/block/EnchantingTableBlock.isValidBookShelf",
+   "side": "both",
    "result": "present",
    "signature": [
     "Lnet/minecraft/world/level/block/EnchantingTableBlock;isValidBookShelf(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/BlockPos;)Z"
@@ -580,6 +612,7 @@
    "note": "实体读存档",
    "expect": "present",
    "name": "net/minecraft/world/entity/Entity.readAdditionalSaveData",
+   "side": "both",
    "result": "present",
    "signature": [
     "Lnet/minecraft/world/entity/Entity;readAdditionalSaveData(Lnet/minecraft/world/level/storage/ValueInput;)V"
@@ -593,6 +626,7 @@
    "note": "受伤入口 (guide 里的写法靠这条验证)",
    "expect": "present",
    "name": "net/minecraft/world/entity/Entity.hurt",
+   "side": "both",
    "result": "no-evidence",
    "signature": "",
    "evidence": "未匹配到: 231 条 target / 395 条 method 证据中无 net/minecraft/world/entity/Entity.hurt",
@@ -604,6 +638,7 @@
    "note": "26.x 的服务端侧受伤方法",
    "expect": "present",
    "name": "net/minecraft/world/entity/Entity.hurtServer",
+   "side": "both",
    "result": "present(symbol)",
    "signature": [
     "hurtServer"
@@ -617,6 +652,7 @@
    "note": "击杀回调 (fabric 死亡事件用它)",
    "expect": "present",
    "name": "net/minecraft/world/entity/Entity.killedEntity",
+   "side": "both",
    "result": "present",
    "signature": [
     "Lnet/minecraft/world/entity/Entity;killedEntity(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/damagesource/DamageSource;)Z"
@@ -630,6 +666,7 @@
    "note": "tooltip 构建 (ItemTooltipCallback 的注入点)",
    "expect": "present",
    "name": "net/minecraft/world/item/ItemStack.addToTooltip",
+   "side": "both",
    "result": "present",
    "signature": [
     "Lnet/minecraft/world/item/ItemStack;addToTooltip(Lnet/minecraft/core/component/DataComponentType;Lnet/minecraft/world/item/Item$TooltipContext;Lnet/minecraft/world/item/component/TooltipDisplay;Ljava/util/function/Consumer;Lnet/minecraft/world/item/TooltipFlag;)V"
@@ -643,6 +680,7 @@
    "note": "客户端交互",
    "expect": "present",
    "name": "net/minecraft/client/multiplayer/MultiPlayerGameMode.interact",
+   "side": "both",
    "result": "present",
    "signature": [
     "Lnet/minecraft/client/multiplayer/MultiPlayerGameMode;interact(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/EntityHitResult;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;"
@@ -656,9 +694,10 @@
    "note": "26.3 燃料改用 DataComponents.COOKING_FUEL, 26.2 用 FuelRegistry 所以不该出现",
    "expect": "info",
    "name": "常量池符号 COOKING_FUEL",
+   "side": "both",
    "result": "absent",
    "signature": [],
-   "evidence": "全部 44 个子模块中未出现 \"COOKING_FUEL\"",
+   "evidence": "全部 45 个子模块中未出现 \"COOKING_FUEL\"",
    "status": "INFO"
   },
   {
@@ -667,6 +706,7 @@
    "note": "26.3 堆肥改用 DataComponents.COMPOSTABLE",
    "expect": "info",
    "name": "常量池符号 COMPOSTABLE",
+   "side": "both",
    "result": "present",
    "signature": [
     "fabric-content-registries-v0-15.0.4+74ed1ea55d.jar!net.fabricmc.fabric.mixin.content.registry.WorkAtComposterAccessor",
@@ -681,9 +721,10 @@
    "note": "26.3 酿造燃料组件",
    "expect": "info",
    "name": "常量池符号 BREWING_FUEL",
+   "side": "both",
    "result": "absent",
    "signature": [],
-   "evidence": "全部 44 个子模块中未出现 \"BREWING_FUEL\"",
+   "evidence": "全部 45 个子模块中未出现 \"BREWING_FUEL\"",
    "status": "INFO"
   },
   {
@@ -692,6 +733,7 @@
    "note": "26.3 新增: 方块可覆写提供附魔威力",
    "expect": "info",
    "name": "常量池符号 getProvidedEnchantmentPower",
+   "side": "both",
    "result": "present",
    "signature": [
     "fabric-block-api-v1-3.1.0+0ae6f9115d.jar!net.fabricmc.fabric.api.block.v1.FabricBlock",
@@ -707,6 +749,7 @@
    "note": "26.3 客户端 GLFW→SDL 迁移后按键常量应走这个类",
    "expect": "info",
    "name": "常量池符号 InputConstants",
+   "side": "both",
    "result": "present",
    "signature": [
     "fabric-creative-tab-api-v1-5.0.21+fcdff87f5d.jar!net.fabricmc.fabric.mixin.creativetab.client.CreativeModeInventoryScreenMixin",
@@ -715,6 +758,523 @@
    ],
    "evidence": "3 个 fabric class 的常量池里出现符号 \"InputConstants\"",
    "status": "INFO"
+  },
+  {
+   "id": "entrypoint.dedicated_server",
+   "kind": "fabric",
+   "note": "服务端 mod 入口点, fabric.mod.json 的 \"server\" entrypoint 用这个",
+   "expect": "present",
+   "name": "net.fabricmc.api.DedicatedServerModInitializer",
+   "side": "server",
+   "result": "present",
+   "signature": [
+    "Compiled from \"DedicatedServerModInitializer.java\"",
+    "public interface net.fabricmc.api.DedicatedServerModInitializer {",
+    "public abstract void onInitializeServer();",
+    "}"
+   ],
+   "evidence": "javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.api.DedicatedServerModInitializer",
+   "missing": [],
+   "status": "PASS"
+  },
+  {
+   "id": "entrypoint.main",
+   "kind": "fabric",
+   "note": "通用入口点, 客户端服务端都跑",
+   "expect": "present",
+   "name": "net.fabricmc.api.ModInitializer",
+   "side": "both",
+   "result": "present",
+   "signature": [
+    "Compiled from \"ModInitializer.java\"",
+    "public interface net.fabricmc.api.ModInitializer {",
+    "public abstract void onInitialize();",
+    "}"
+   ],
+   "evidence": "javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.api.ModInitializer",
+   "missing": [],
+   "status": "PASS"
+  },
+  {
+   "id": "entrypoint.client",
+   "kind": "fabric",
+   "note": "对照用: 客户端入口点, 服务端 mod 别用",
+   "expect": "present",
+   "name": "net.fabricmc.api.ClientModInitializer",
+   "side": "client",
+   "result": "present",
+   "signature": [
+    "Compiled from \"ClientModInitializer.java\"",
+    "public interface net.fabricmc.api.ClientModInitializer {",
+    "public abstract void onInitializeClient();",
+    "}"
+   ],
+   "evidence": "javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.api.ClientModInitializer",
+   "missing": [],
+   "status": "PASS"
+  },
+  {
+   "id": "api.envtype",
+   "kind": "fabric",
+   "note": "EnvType.SERVER, 配合 @Environment 使用",
+   "expect": "present",
+   "name": "net.fabricmc.api.EnvType",
+   "side": "both",
+   "result": "present",
+   "signature": [
+    "Compiled from \"EnvType.java\"",
+    "public final class net.fabricmc.api.EnvType extends java.lang.Enum<net.fabricmc.api.EnvType> {",
+    "public static final net.fabricmc.api.EnvType CLIENT;",
+    "public static final net.fabricmc.api.EnvType SERVER;",
+    "public static net.fabricmc.api.EnvType[] values();",
+    "public static net.fabricmc.api.EnvType valueOf(java.lang.String);",
+    "static {};",
+    "}"
+   ],
+   "evidence": "javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.api.EnvType",
+   "missing": [],
+   "status": "PASS"
+  },
+  {
+   "id": "api.environment",
+   "kind": "fabric",
+   "note": "@Environment(EnvType.SERVER) 注解",
+   "expect": "present",
+   "name": "net.fabricmc.api.Environment",
+   "side": "both",
+   "result": "present",
+   "signature": [
+    "Compiled from \"Environment.java\"",
+    "public interface net.fabricmc.api.Environment extends java.lang.annotation.Annotation {",
+    "public abstract net.fabricmc.api.EnvType value();",
+    "}"
+   ],
+   "evidence": "javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.api.Environment",
+   "missing": [],
+   "status": "PASS"
+  },
+  {
+   "id": "loader.server.launcher",
+   "kind": "fabric",
+   "note": "loader jar 的 Main-Class, 服务端启动入口",
+   "expect": "present",
+   "name": "net.fabricmc.loader.impl.launch.server.FabricServerLauncher",
+   "side": "server",
+   "result": "present",
+   "signature": [
+    "Compiled from \"FabricServerLauncher.java\"",
+    "public class net.fabricmc.loader.impl.launch.server.FabricServerLauncher {",
+    "public net.fabricmc.loader.impl.launch.server.FabricServerLauncher();",
+    "public static void main(java.lang.String[]);",
+    "static {};",
+    "}"
+   ],
+   "evidence": "javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.loader.impl.launch.server.FabricServerLauncher",
+   "missing": [],
+   "status": "PASS"
+  },
+  {
+   "id": "loader.knot.server",
+   "kind": "fabric",
+   "note": "服务端 Knot 启动器",
+   "expect": "present",
+   "name": "net.fabricmc.loader.impl.launch.knot.KnotServer",
+   "side": "server",
+   "result": "present",
+   "signature": [
+    "Compiled from \"KnotServer.java\"",
+    "public class net.fabricmc.loader.impl.launch.knot.KnotServer {",
+    "public net.fabricmc.loader.impl.launch.knot.KnotServer();",
+    "public static void main(java.lang.String[]);",
+    "}"
+   ],
+   "evidence": "javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.loader.impl.launch.knot.KnotServer",
+   "missing": [],
+   "status": "PASS"
+  },
+  {
+   "id": "server.lifecycle",
+   "kind": "fabric",
+   "note": "服务端启停",
+   "expect": "present",
+   "name": "net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents",
+   "side": "server",
+   "result": "present",
+   "signature": [
+    "Compiled from \"ServerLifecycleEvents.java\"",
+    "public final class net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents {",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$ServerStarting> SERVER_STARTING;",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$ServerStarted> SERVER_STARTED;",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$ServerStopping> SERVER_STOPPING;",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$ServerStopped> SERVER_STOPPED;",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$SyncDataPackContents> SYNC_DATA_PACK_CONTENTS;",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$StartDataPackReload> START_DATA_PACK_RELOAD;",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$EndDataPackReload> END_DATA_PACK_RELOAD;",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$BeforeSave> BEFORE_SAVE;",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$AfterSave> AFTER_SAVE;",
+    "static {};",
+    "}"
+   ],
+   "evidence": "javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents",
+   "missing": [],
+   "status": "PASS"
+  },
+  {
+   "id": "server.level.events",
+   "kind": "fabric",
+   "note": "维度加载/卸载",
+   "expect": "present",
+   "name": "net.fabricmc.fabric.api.event.lifecycle.v1.ServerLevelEvents",
+   "side": "server",
+   "result": "present",
+   "signature": [
+    "Compiled from \"ServerLevelEvents.java\"",
+    "public final class net.fabricmc.fabric.api.event.lifecycle.v1.ServerLevelEvents {",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerLevelEvents$Load> LOAD;",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerLevelEvents$Unload> UNLOAD;",
+    "static {};",
+    "}"
+   ],
+   "evidence": "javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.fabric.api.event.lifecycle.v1.ServerLevelEvents",
+   "missing": [],
+   "status": "PASS"
+  },
+  {
+   "id": "server.chunk.events",
+   "kind": "fabric",
+   "note": "区块事件",
+   "expect": "present",
+   "name": "net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents",
+   "side": "server",
+   "result": "present",
+   "signature": [
+    "Compiled from \"ServerChunkEvents.java\"",
+    "public final class net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents {",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents$Load> CHUNK_LOAD;",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents$Generate> CHUNK_GENERATE;",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents$Unload> CHUNK_UNLOAD;",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents$FullChunkStatusChange> FULL_CHUNK_STATUS_CHANGE;",
+    "static {};",
+    "}"
+   ],
+   "evidence": "javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents",
+   "missing": [],
+   "status": "PASS"
+  },
+  {
+   "id": "server.entity.events",
+   "kind": "fabric",
+   "note": "实体进出世界",
+   "expect": "present",
+   "name": "net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents",
+   "side": "server",
+   "result": "present",
+   "signature": [
+    "Compiled from \"ServerEntityEvents.java\"",
+    "public final class net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents {",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents$Load> ENTITY_LOAD;",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents$AllowLoad> ALLOW_LOAD;",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents$Unload> ENTITY_UNLOAD;",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents$EquipmentChange> EQUIPMENT_CHANGE;",
+    "static {};",
+    "}"
+   ],
+   "evidence": "javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents",
+   "missing": [],
+   "status": "PASS"
+  },
+  {
+   "id": "server.blockentity.events",
+   "kind": "fabric",
+   "note": "方块实体事件",
+   "expect": "present",
+   "name": "net.fabricmc.fabric.api.event.lifecycle.v1.ServerBlockEntityEvents",
+   "side": "server",
+   "result": "present",
+   "signature": [
+    "Compiled from \"ServerBlockEntityEvents.java\"",
+    "public final class net.fabricmc.fabric.api.event.lifecycle.v1.ServerBlockEntityEvents {",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerBlockEntityEvents$Load> BLOCK_ENTITY_LOAD;",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerBlockEntityEvents$Unload> BLOCK_ENTITY_UNLOAD;",
+    "static {};",
+    "}"
+   ],
+   "evidence": "javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.fabric.api.event.lifecycle.v1.ServerBlockEntityEvents",
+   "missing": [],
+   "status": "PASS"
+  },
+  {
+   "id": "server.player.events",
+   "kind": "fabric",
+   "note": "玩家复制/重生",
+   "expect": "present",
+   "name": "net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents",
+   "side": "server",
+   "result": "present",
+   "signature": [
+    "Compiled from \"ServerPlayerEvents.java\"",
+    "public final class net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents {",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents$CopyFrom> COPY_FROM;",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents$AfterRespawn> AFTER_RESPAWN;",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents$Join> JOIN;",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents$Leave> LEAVE;",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents$AllowDeath> ALLOW_DEATH;",
+    "static {};",
+    "}"
+   ],
+   "evidence": "javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents",
+   "missing": [],
+   "status": "PASS"
+  },
+  {
+   "id": "server.entity.combat",
+   "kind": "fabric",
+   "note": "击杀回调",
+   "expect": "present",
+   "name": "net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents",
+   "side": "server",
+   "result": "present",
+   "signature": [
+    "Compiled from \"ServerEntityCombatEvents.java\"",
+    "public final class net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents {",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents$AfterKilledOtherEntity> AFTER_KILLED_OTHER_ENTITY;",
+    "static {};",
+    "}"
+   ],
+   "evidence": "javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents",
+   "missing": [],
+   "status": "PASS"
+  },
+  {
+   "id": "server.play.connection",
+   "kind": "fabric",
+   "note": "玩家进/出服",
+   "expect": "present",
+   "name": "net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents",
+   "side": "server",
+   "result": "present",
+   "signature": [
+    "Compiled from \"ServerPlayConnectionEvents.java\"",
+    "public final class net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents {",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents$Init> INIT;",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents$Join> JOIN;",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents$Disconnect> DISCONNECT;",
+    "static {};",
+    "}"
+   ],
+   "evidence": "javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents",
+   "missing": [],
+   "status": "PASS"
+  },
+  {
+   "id": "server.play.networking",
+   "kind": "fabric",
+   "note": "Play 阶段收发包",
+   "expect": "present",
+   "name": "net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking",
+   "side": "server",
+   "result": "present",
+   "signature": [
+    "Compiled from \"ServerPlayNetworking.java\"",
+    "public final class net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking {",
+    "public static <T extends net.minecraft.network.protocol.common.custom.CustomPacketPayload> boolean registerGlobalReceiver(net.minecraft.network.protocol.common.custom.CustomPacketPayload$Type<T>, net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking$PlayPayloadHandler<T>);",
+    "public static net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking$PlayPayloadHandler<?> unregisterGlobalReceiver(net.minecraft.resources.Identifier);",
+    "public static java.util.Set<net.minecraft.resources.Identifier> getGlobalReceivers();",
+    "public static <T extends net.minecraft.network.protocol.common.custom.CustomPacketPayload> boolean registerReceiver(net.minecraft.server.network.ServerGamePacketListenerImpl, net.minecraft.network.protocol.common.custom.CustomPacketPayload$Type<T>, net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking$PlayPayloadHandler<T>);",
+    "public static net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking$PlayPayloadHandler<?> unregisterReceiver(net.minecraft.server.network.ServerGamePacketListenerImpl, net.minecraft.resources.Identifier);",
+    "public static java.util.Set<net.minecraft.resources.Identifier> getReceived(net.minecraft.server.level.ServerPlayer);",
+    "public static java.util.Set<net.minecraft.resources.Identifier> getReceived(net.minecraft.server.network.ServerGamePacketListenerImpl);",
+    "public static java.util.Set<net.minecraft.resources.Identifier> getSendable(net.minecraft.server.level.ServerPlayer);",
+    "public static java.util.Set<net.minecraft.resources.Identifier> getSendable(net.minecraft.server.network.ServerGamePacketListenerImpl);",
+    "public static boolean canSend(net.minecraft.server.level.ServerPlayer, net.minecraft.resources.Identifier);",
+    "public static boolean canSend(net.minecraft.server.level.ServerPlayer, net.minecraft.network.protocol.common.custom.CustomPacketPayload$Type<?>);",
+    "public static boolean canSend(net.minecraft.server.network.ServerGamePacketListenerImpl, net.minecraft.resources.Identifier);",
+    "public static boolean canSend(net.minecraft.server.network.ServerGamePacketListenerImpl, net.minecraft.network.protocol.common.custom.CustomPacketPayload$Type<?>);",
+    "public static <T extends net.minecraft.network.protocol.common.custom.CustomPacketPayload> net.minecraft.network.protocol.Packet<net.minecraft.network.protocol.common.ClientCommonPacketListener> createClientboundPacket(T);",
+    "public static net.fabricmc.fabric.api.networking.v1.PacketSender getSender(net.minecraft.server.level.ServerPlayer);",
+    "public static net.fabricmc.fabric.api.networking.v1.PacketSender getSender(net.minecraft.server.network.ServerGamePacketListenerImpl);",
+    "public static void send(net.minecraft.server.level.ServerPlayer, net.minecraft.network.protocol.common.custom.CustomPacketPayload);",
+    "public static void reconfigure(net.minecraft.server.level.ServerPlayer);",
+    "public static void reconfigure(net.minecraft.server.network.ServerGamePacketListenerImpl);",
+    "}"
+   ],
+   "evidence": "javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking",
+   "missing": [],
+   "status": "PASS"
+  },
+  {
+   "id": "server.configuration.networking",
+   "kind": "fabric",
+   "note": "Configuration 阶段收发包",
+   "expect": "present",
+   "name": "net.fabricmc.fabric.api.networking.v1.ServerConfigurationNetworking",
+   "side": "server",
+   "result": "present",
+   "signature": [
+    "Compiled from \"ServerConfigurationNetworking.java\"",
+    "public final class net.fabricmc.fabric.api.networking.v1.ServerConfigurationNetworking {",
+    "public static <T extends net.minecraft.network.protocol.common.custom.CustomPacketPayload> boolean registerGlobalReceiver(net.minecraft.network.protocol.common.custom.CustomPacketPayload$Type<T>, net.fabricmc.fabric.api.networking.v1.ServerConfigurationNetworking$ConfigurationPacketHandler<T>);",
+    "public static net.fabricmc.fabric.api.networking.v1.ServerConfigurationNetworking$ConfigurationPacketHandler<?> unregisterGlobalReceiver(net.minecraft.resources.Identifier);",
+    "public static java.util.Set<net.minecraft.resources.Identifier> getGlobalReceivers();",
+    "public static <T extends net.minecraft.network.protocol.common.custom.CustomPacketPayload> boolean registerReceiver(net.minecraft.server.network.ServerConfigurationPacketListenerImpl, net.minecraft.network.protocol.common.custom.CustomPacketPayload$Type<T>, net.fabricmc.fabric.api.networking.v1.ServerConfigurationNetworking$ConfigurationPacketHandler<T>);",
+    "public static net.fabricmc.fabric.api.networking.v1.ServerConfigurationNetworking$ConfigurationPacketHandler<?> unregisterReceiver(net.minecraft.server.network.ServerConfigurationPacketListenerImpl, net.minecraft.resources.Identifier);",
+    "public static java.util.Set<net.minecraft.resources.Identifier> getReceived(net.minecraft.server.network.ServerConfigurationPacketListenerImpl);",
+    "public static java.util.Set<net.minecraft.resources.Identifier> getSendable(net.minecraft.server.network.ServerConfigurationPacketListenerImpl);",
+    "public static boolean canSend(net.minecraft.server.network.ServerConfigurationPacketListenerImpl, net.minecraft.resources.Identifier);",
+    "public static boolean canSend(net.minecraft.server.network.ServerConfigurationPacketListenerImpl, net.minecraft.network.protocol.common.custom.CustomPacketPayload$Type<?>);",
+    "public static net.minecraft.network.protocol.Packet<net.minecraft.network.protocol.common.ClientCommonPacketListener> createClientboundPacket(net.minecraft.network.protocol.common.custom.CustomPacketPayload);",
+    "public static net.fabricmc.fabric.api.networking.v1.PacketSender getSender(net.minecraft.server.network.ServerConfigurationPacketListenerImpl);",
+    "public static void send(net.minecraft.server.network.ServerConfigurationPacketListenerImpl, net.minecraft.network.protocol.common.custom.CustomPacketPayload);",
+    "public static net.minecraft.server.MinecraftServer getServer(net.minecraft.server.network.ServerConfigurationPacketListenerImpl);",
+    "public static boolean isReconfiguring(net.minecraft.server.network.ServerConfigurationPacketListenerImpl);",
+    "}"
+   ],
+   "evidence": "javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.fabric.api.networking.v1.ServerConfigurationNetworking",
+   "missing": [],
+   "status": "PASS"
+  },
+  {
+   "id": "server.login.networking",
+   "kind": "fabric",
+   "note": "Login 阶段查询/应答",
+   "expect": "present",
+   "name": "net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking",
+   "side": "server",
+   "result": "present",
+   "signature": [
+    "Compiled from \"ServerLoginNetworking.java\"",
+    "public final class net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking {",
+    "public static boolean registerGlobalReceiver(net.minecraft.resources.Identifier, net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking$LoginQueryResponseHandler);",
+    "public static net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking$LoginQueryResponseHandler unregisterGlobalReceiver(net.minecraft.resources.Identifier);",
+    "public static java.util.Set<net.minecraft.resources.Identifier> getGlobalReceivers();",
+    "public static boolean registerReceiver(net.minecraft.server.network.ServerLoginPacketListenerImpl, net.minecraft.resources.Identifier, net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking$LoginQueryResponseHandler);",
+    "public static net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking$LoginQueryResponseHandler unregisterReceiver(net.minecraft.server.network.ServerLoginPacketListenerImpl, net.minecraft.resources.Identifier);",
+    "public static net.minecraft.server.MinecraftServer getServer(net.minecraft.server.network.ServerLoginPacketListenerImpl);",
+    "public static net.fabricmc.fabric.api.networking.v1.LoginPacketSender getSender(net.minecraft.server.network.ServerLoginPacketListenerImpl);",
+    "}"
+   ],
+   "evidence": "javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking",
+   "missing": [],
+   "status": "PASS"
+  },
+  {
+   "id": "server.message.events",
+   "kind": "fabric",
+   "note": "聊天消息拦截",
+   "expect": "present",
+   "name": "net.fabricmc.fabric.api.message.v1.ServerMessageEvents",
+   "side": "server",
+   "result": "present",
+   "signature": [
+    "Compiled from \"ServerMessageEvents.java\"",
+    "public final class net.fabricmc.fabric.api.message.v1.ServerMessageEvents {",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.message.v1.ServerMessageEvents$AllowChatMessage> ALLOW_CHAT_MESSAGE;",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.message.v1.ServerMessageEvents$AllowGameMessage> ALLOW_GAME_MESSAGE;",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.message.v1.ServerMessageEvents$AllowCommandMessage> ALLOW_COMMAND_MESSAGE;",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.message.v1.ServerMessageEvents$ChatMessage> CHAT_MESSAGE;",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.message.v1.ServerMessageEvents$GameMessage> GAME_MESSAGE;",
+    "public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.message.v1.ServerMessageEvents$CommandMessage> COMMAND_MESSAGE;",
+    "static {};",
+    "}"
+   ],
+   "evidence": "javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.fabric.api.message.v1.ServerMessageEvents",
+   "missing": [],
+   "status": "PASS"
+  },
+  {
+   "id": "server.resource.helper",
+   "kind": "fabric",
+   "note": "挂 reload listener / 内置资源包",
+   "expect": "present",
+   "name": "net.fabricmc.fabric.api.resource.ResourceManagerHelper",
+   "side": "server",
+   "result": "present",
+   "signature": [
+    "Compiled from \"ResourceManagerHelper.java\"",
+    "public interface net.fabricmc.fabric.api.resource.ResourceManagerHelper {",
+    "public default void addReloadListener(net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener);",
+    "public abstract void registerReloadListener(net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener);",
+    "public abstract void registerReloadListener(net.minecraft.resources.Identifier, java.util.function.Function<net.minecraft.core.HolderLookup$Provider, net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener>);",
+    "public static net.fabricmc.fabric.api.resource.ResourceManagerHelper get(net.minecraft.server.packs.PackType);",
+    "public static boolean registerBuiltinResourcePack(net.minecraft.resources.Identifier, net.fabricmc.loader.api.ModContainer, net.fabricmc.fabric.api.resource.ResourcePackActivationType);",
+    "public static boolean registerBuiltinResourcePack(net.minecraft.resources.Identifier, net.fabricmc.loader.api.ModContainer, net.minecraft.network.chat.Component, net.fabricmc.fabric.api.resource.ResourcePackActivationType);",
+    "public static boolean registerBuiltinResourcePack(net.minecraft.resources.Identifier, net.fabricmc.loader.api.ModContainer, java.lang.String, net.fabricmc.fabric.api.resource.ResourcePackActivationType);",
+    "public static boolean registerBuiltinResourcePack(net.minecraft.resources.Identifier, java.lang.String, net.fabricmc.loader.api.ModContainer, boolean);",
+    "}"
+   ],
+   "evidence": "javap -cp <fabric-api-0.161.0+26.3.jar 子模块> net.fabricmc.fabric.api.resource.ResourceManagerHelper",
+   "missing": [],
+   "status": "PASS"
+  },
+  {
+   "id": "mc.minecraftserver.initserver",
+   "kind": "mojang",
+   "note": "服务端初始化",
+   "expect": "present",
+   "name": "net/minecraft/server/MinecraftServer.initServer",
+   "side": "server",
+   "result": "present",
+   "signature": [
+    "Lnet/minecraft/server/MinecraftServer;initServer()Z"
+   ],
+   "evidence": "mixin 注解 target=Lnet/minecraft/server/MinecraftServer;initServer()Z (来自 net.fabricmc.fabric.mixin.event.lifecycle.MinecraftServerMixin)",
+   "status": "PASS"
+  },
+  {
+   "id": "mc.minecraftserver.tickchildren",
+   "kind": "mojang",
+   "note": "tick 子维度",
+   "expect": "present",
+   "name": "net/minecraft/server/MinecraftServer.tickChildren",
+   "side": "server",
+   "result": "present",
+   "signature": [
+    "Lnet/minecraft/server/MinecraftServer;tickChildren(Ljava/util/function/BooleanSupplier;)V"
+   ],
+   "evidence": "mixin 注解 target=Lnet/minecraft/server/MinecraftServer;tickChildren(Ljava/util/function/BooleanSupplier;)V (来自 net.fabricmc.fabric.mixin.event.lifecycle.MinecraftServerMixin)",
+   "status": "PASS"
+  },
+  {
+   "id": "mc.serverplayer.setrespawnposition",
+   "kind": "mojang",
+   "note": "设置重生点",
+   "expect": "present",
+   "name": "net/minecraft/server/level/ServerPlayer.setRespawnPosition",
+   "side": "server",
+   "result": "present",
+   "signature": [
+    "Lnet/minecraft/server/level/ServerPlayer;setRespawnPosition(Lnet/minecraft/server/level/ServerPlayer$RespawnConfig;Z)V"
+   ],
+   "evidence": "mixin 注解 target=Lnet/minecraft/server/level/ServerPlayer;setRespawnPosition(Lnet/minecraft/server/level/ServerPlayer$RespawnConfig;Z)V (来自 net.fabricmc.fabric.mixin.entity.event.ServerPlayerMixin)",
+   "status": "PASS"
+  },
+  {
+   "id": "mc.servergamepacketlistener.send",
+   "kind": "mojang",
+   "note": "给单个玩家发包",
+   "expect": "present",
+   "name": "net/minecraft/server/network/ServerGamePacketListenerImpl.send",
+   "side": "server",
+   "result": "present",
+   "signature": [
+    "Lnet/minecraft/server/network/ServerGamePacketListenerImpl;send(Lnet/minecraft/network/protocol/Packet;)V"
+   ],
+   "evidence": "mixin 注解 target=Lnet/minecraft/server/network/ServerGamePacketListenerImpl;send(Lnet/minecraft/network/protocol/Packet;)V (来自 net.fabricmc.fabric.mixin.menu.ServerPlayerMixin)",
+   "status": "PASS"
+  },
+  {
+   "id": "mc.entity.teleportcrossdimension",
+   "kind": "mojang",
+   "note": "跨维度传送",
+   "expect": "present",
+   "name": "net/minecraft/world/entity/Entity.teleportCrossDimension",
+   "side": "server",
+   "result": "present",
+   "signature": [
+    "Lnet/minecraft/world/entity/Entity;teleportCrossDimension(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/level/portal/TeleportTransition;)Lnet/minecraft/world/entity/Entity;"
+   ],
+   "evidence": "mixin 注解 target=Lnet/minecraft/world/entity/Entity;teleportCrossDimension(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/level/portal/TeleportTransition;)Lnet/minecraft/world/entity/Entity; (来自 net.fabricmc.fabric.mixin.entity.event.EntityMixin)",
+   "status": "PASS"
   }
  ]
 }

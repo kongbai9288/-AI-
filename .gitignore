@@ -12,3 +12,5 @@ cp_26.2/
 cp_26.3/
 exp/
 stub/
+jdk-25*/
+*.part-*

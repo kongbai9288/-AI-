@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "aimod-server",
+  "version": "${version}",
+  "name": "AI Fabric Server Mod",
+  "description": "纯服务端 Fabric mod 骨架 (MC 26.x)",
+  "authors": ["AI"],
+  "contact": {},
+  "license": "MIT",
+
+  "environment": "server",
+  "_environment_note": "纯服务端 mod 写 \"server\"; 写 \"*\" 会被一起装进客户端, 客户端加载时才报 NoClassDefFoundError",
+
+  "entrypoints": {
+    "server": [
+      "com.example.aimod.server.AIModServer"
+    ]
+  },
+  "_entrypoint_note": "服务端入口点实现 net.fabricmc.api.DedicatedServerModInitializer#onInitializeServer(); 实测签名: public abstract void onInitializeServer()",
+
+  "mixins": [],
+
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": ">=26.3",
+    "java": ">=25",
+    "fabric-api": "*"
+  },
+  "_depends_note": "minecraft 用 >= 不用 ~; 见 AI_DEV_GUIDE 第五节",
+
+  "suggests": {}
+}

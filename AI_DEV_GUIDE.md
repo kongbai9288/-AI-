@@ -6,6 +6,41 @@
 
 ---
 
+## 〇、仓库分类地图
+
+```
+-AI-/
+├── 26.2/            26.2 版本目录(归档): 基线 + fabric-api + 版本 API 表
+├── 26.3/            26.3 版本目录(当前): 同上
+├── server/          服务端资料(版本无关): 装服/起服/服务端 mod 骨架
+│   ├── README.md        分类导航 + 三条装服路线
+│   ├── SETUP_REPORT.md  脚本生成的实测报告(命令参数/产物名/翻车现场)
+│   ├── start.sh         起服脚本(自动找 JDK 25)
+│   └── fabric.mod.json  纯服务端 mod 模板(environment: server)
+├── toolchain/       公共件(版本无关): JDK 25 / loader / installer / yarn
+│   └── README.md        为什么这些不按版本分(带实验)
+├── templates/       mod 项目骨架
+├── scripts/         实测与工具脚本
+│   ├── verify_api_table.py   生成 26.2/26.3 的版本 API 表(68 条)
+│   ├── verify_server.py      生成 server/SETUP_REPORT.md
+│   └── use_version.py        把公共件组装进版本目录
+└── AI_DEV_GUIDE.md  本文件
+```
+
+**分类原则**：跟着 MC 版本变的进版本目录，不跟着变的进公共目录。
+判据是实测的，不是拍脑袋 —— 见 [`toolchain/README.md`](toolchain/README.md)。
+
+### 服务端资料在哪
+
+| 你想要 | 去哪 |
+|---|---|
+| 装服命令、产物名、翻车现场 | [`server/SETUP_REPORT.md`](server/SETUP_REPORT.md) |
+| 一键起服 | [`server/start.sh`](server/start.sh) |
+| 纯服务端 mod 的 `fabric.mod.json` | [`server/fabric.mod.json`](server/fabric.mod.json) |
+| 某版本的服务端 API（21 条） | `26.3/API_TABLE.md` 里「端=服务端」的行 |
+
+---
+
 ## 〇、先选版本目录
 
 | 目录 | 状态 | 什么时候用 |
@@ -188,6 +223,40 @@ python3 scripts/use_version.py 26.3 --jdk    # 顺带 cat 分卷 + 解压 JDK
 
 > 唯一 UNPROVEN：`Entity.hurt` —— 本仓库没有 MC 本体 jar，且 Fabric 的 mixin 没触及它，
 > 所以拿不到证据。写伤害代码前请在有 MC jar 的环境跑 `javap -cp <mc-jar> net.minecraft.world.entity.Entity`。
+
+---
+
+## 二之三、服务端（新增）
+
+完整资料在 [`server/`](server/)（版本无关）与各版本的 API 表（版本相关）。
+
+### 版本 API 表里的服务端条目：每个版本 21 条，全部实测通过
+
+| 分组 | 条目 |
+|---|---|
+| 入口点 | `DedicatedServerModInitializer`、`ModInitializer`、`EnvType`、`@Environment` |
+| 启动器 | `FabricServerLauncher`、`KnotServer` |
+| 生命周期 | `ServerLifecycleEvents`、`ServerTickEvents`、`ServerLevelEvents`、`ServerChunkEvents`、`ServerEntityEvents`、`ServerBlockEntityEvents` |
+| 实体 | `ServerPlayerEvents`、`ServerEntityCombatEvents` |
+| 网络 | `ServerPlayConnectionEvents`、`ServerPlayNetworking`、`ServerConfigurationNetworking`、`ServerLoginNetworking` |
+| 消息/资源 | `ServerMessageEvents`、`ResourceManagerHelper` |
+
+MC 本体侧（mixin 证据）：`MinecraftServer.initServer()`、`MinecraftServer.tickChildren()`、
+`ServerPlayer.setRespawnPosition(...)`、`ServerGamePacketListenerImpl.send(...)`、
+`Entity.teleportCrossDimension(ServerLevel, ServerLevel, TeleportTransition)`。
+
+### 服务端实测要点（跑出来的）
+
+- 服务端 mod 入口点是 `DedicatedServerModInitializer.onInitializeServer()`，
+  它**在 loader 里不在 fabric-api 里** —— 查签名时 classpath 要带 loader jar
+- installer 的 `server` 子命令：`-dir -mcversion -loader -downloadMinecraft`（开关不带值）
+- 产物：`fabric-server-launch.jar` + `fabric-server-launch.properties`，vanilla jar 叫 `server.jar`
+- ⚠️ **别直接 `java -jar fabric-loader.jar`**：过了 game jar 检查后会报
+  `ASM not detected on the classpath`（`Knot.<clinit>`）。起服目标是 `fabric-server-launch.jar`
+- installer 一启动就拉 `meta.fabricmc.net`，全挂抛 `Unable to load metadata` → 离线装不了服
+- 26.3 起服务端默认开白名单（社区资料，本仓库未实测，以启动后的 `server.properties` 为准）
+
+复现：`python3 scripts/verify_server.py`
 
 ---
 
@@ -404,6 +473,8 @@ javap -cp "$CP" net.minecraft.world.entity.Entity   # 核对签名
 | `fabric-api-0.160.0+26.2.jar` | 同上（manifest 无此条目，为补记录） | ✅ `5f3dff88…ea05e`，已写入 `26.2/versions.json` |
 | 26.3 版本基线 | 核对 fabricmc.net/develop、Fabric 26.3 公告、Modrinth | ✅ loader 0.19.5 / API 0.161.0+26.3 / Java 25 |
 | API 增删 | 解开两个 API jar 的 jar-in-jar 子模块按类名比对 | ✅ 与 26.3 公告的移除清单一致 |
+| 服务端部署实测 | 真跑 `java -jar loader.jar`（缺/有 server.jar 两场景）+ 读 class 常量池 | ✅ 拿到 CLI 参数、产物名；并发现裸 loader jar 缺 ASM |
+| 服务端 API 条目 | `javap`（classpath 含 loader jar） | ✅ 两版本各 21 条服务端条目全 PASS |
 | Loader / Installer 版本无关性 | 字节扫描 + 反射真跑 `McVersionLookup` | ✅ loader 对 26.2/26.3 同分支；installer 0 处版本串 |
 | 版本 API 表（26.2） | `javap` 25 读 fabric-api jar + mixin 注解 | ✅ 43 条：37 PASS / 1 UNPROVEN / 5 INFO |
 | 版本 API 表（26.3） | 同上 | ✅ 43 条：37 PASS / 1 UNPROVEN / 5 INFO |

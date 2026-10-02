@@ -39,7 +39,12 @@
         "反射真实调用 McVersionLookup.getRelease('26.2')='26.2' / ('26.3')='26.3', 走 DATE_BASED_PATTERN 分支",
         "DATE_BASED_PATTERN=(\\d{2}\\.\\d+(?:\\.\\d+)?)(?:-(snapshot|pre|rc)-(\\d+))? 匹配 26.2/26.3/26.1.1, 不匹配 1.21.11 -> 26.x 是同一条代码路径"
       ],
-      "note": "26.2 官方公告当时的推荐值是 0.19.3, 但 0.19.5 对 26.2/26.3 走同一分支, 无需按版本复制"
+      "note": "26.2 官方公告当时的推荐值是 0.19.3, 但 0.19.5 对 26.2/26.3 走同一分支, 无需按版本复制",
+      "server_entry": "net.fabricmc.loader.impl.launch.server.FabricServerLauncher (loader jar 的 Main-Class)",
+      "server_requires": [
+        "官方 server.jar 在同目录或由 fabric-server-launcher.properties 指定",
+        "ASM 等依赖须在 classpath (installer 生成的 launch jar 已带)"
+      ]
     },
     "installer": {
       "file": "fabric-installer-1.1.2.jar",
@@ -57,7 +62,18 @@
         "jar 内 0 处 MC 版本字符串(26.2/26.3/26.1/1.21/1.20/25w 全部为 0 次)",
         "版本列表运行时从 meta.fabricmc.net/ 与 launchermeta.mojang.com 拉取, 未内置"
       ],
-      "note": "纯启动器, 装哪个 MC 版本由运行时选择决定"
+      "note": "纯启动器, 装哪个 MC 版本由运行时选择决定",
+      "usage": [
+        "server (CLI: server -dir -mcversion -loader -downloadMinecraft)",
+        "client (GUI/CLI)"
+      ],
+      "produces": [
+        "fabric-server-launch.jar",
+        "fabric-server-launch.properties",
+        "server.jar (加 -downloadMinecraft 时)",
+        ".fabric/ (运行时依赖)"
+      ],
+      "launch_target_note": "起服目标是 fabric-server-launch.jar, 不是裸 fabric-loader-*.jar (后者缺 ASM, 见 server/SETUP_REPORT.md 实验 5.5)"
     },
     "yarn": {
       "file": "yarn-1.21.11+build.6.jar",
@@ -102,5 +118,15 @@
       "26.2": "26.2/versions.json -> shared_artifacts",
       "26.3": "26.3/versions.json -> shared_artifacts"
     }
+  },
+  "server_docs": {
+    "dir": "server/",
+    "files": [
+      "README.md",
+      "SETUP_REPORT.md",
+      "start.sh",
+      "fabric.mod.json"
+    ],
+    "api_entries_per_version": "21 条服务端条目, 见 26.2/API_TABLE.md 与 26.3/API_TABLE.md 的「端=服务端」"
   }
 }
