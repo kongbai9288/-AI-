@@ -35,16 +35,42 @@
     }
   ],
   "shared_artifacts": {
-    "note": "以下组件与 MC 版本无关，统一放在 toolchain/ 并由 toolchain/manifest.json 记录 sha256",
+    "policy": "以下组件与 MC 版本无关, 仓库里只在 toolchain/ 存一份; 需要自包含时用 scripts/use_version.py 组装",
+    "evidence": "见 toolchain/README.md: loader 对 26.2/26.3 走同一条 DATE_BASED_PATTERN; installer jar 内 0 处 MC 版本字符串",
     "files": [
-      "toolchain/fabric-loader-0.19.5.jar",
-      "toolchain/fabric-installer-1.1.2.jar",
-      "toolchain/jdk-25-linux-x64.tar.gz.part-*"
-    ],
-    "verified": [
-      {"file": "fabric-loader-0.19.5.jar", "sha256_match": true},
-      {"file": "fabric-installer-1.1.2.jar", "sha256_match": true},
-      {"file": "yarn-1.21.11+build.6.jar", "sha256_match": true, "note": "1.21.11 的映射，26.x 不使用"}
+      {
+        "file": "toolchain/fabric-loader-0.19.5.jar",
+        "sha256": "93044e4dd46de5d8136701292f05e868da096d2c9fddb4793e4fdbcc63efc695",
+        "size": 1984980,
+        "version": "0.19.5",
+        "applies_to": [
+          "26.2",
+          "26.3"
+        ],
+        "version_independent": true
+      },
+      {
+        "file": "toolchain/fabric-installer-1.1.2.jar",
+        "sha256": "61e035bf7bf70153e127440ce34de47c9036f0a2d0c65d1529454bd35ceefe4f",
+        "size": 212123,
+        "version": "1.1.2",
+        "applies_to": [
+          "any"
+        ],
+        "version_independent": true
+      },
+      {
+        "file": "toolchain/jdk-25-linux-x64.tar.gz.part-*",
+        "sha256": "",
+        "size": 141329719,
+        "version": "25",
+        "applies_to": [
+          "26.2",
+          "26.3"
+        ],
+        "version_independent": true,
+        "note": "26.2 与 26.3 的 Mojang 元数据均要求 Java 25"
+      }
     ]
   },
   "api_probe": {
@@ -64,7 +90,9 @@
       "DefaultItemComponentEvents",
       "FluidFlowEvents"
     ],
-    "absent": ["ItemGroupEvents"]
+    "absent": [
+      "ItemGroupEvents"
+    ]
   },
   "sources": [
     "https://fabricmc.net/2026/09/15/263.html",

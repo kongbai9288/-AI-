@@ -11,7 +11,15 @@
     ],
     "major": "25",
     "vendor": "eclipse-temurin",
-    "platform": "linux-x64"
+    "platform": "linux-x64",
+    "applies_to": [
+      "26.2",
+      "26.3"
+    ],
+    "version_independent": true,
+    "verified_by": [
+      "26.2 与 26.3 的 Mojang 元数据均指定 Java 25, 同一份 JDK 即可"
+    ]
   },
   "fabric": {
     "minecraft": "26.3",
@@ -19,19 +27,48 @@
       "file": "fabric-loader-0.19.5.jar",
       "sha256": "93044e4dd46de5d8136701292f05e868da096d2c9fddb4793e4fdbcc63efc695",
       "size": 1984980,
-      "version": "0.19.5"
+      "version": "0.19.5",
+      "applies_to": [
+        "26.2",
+        "26.3"
+      ],
+      "version_independent": true,
+      "verified_at": "2026-10-02",
+      "verified_by": [
+        "jar 内 0 处 '26.2' / '26.3' 硬编码版本字符串(仅 McVersionLookup 有一张滚动更新的历史版本表, 最新硬编码条目为 26.1.1)",
+        "反射真实调用 McVersionLookup.getRelease('26.2')='26.2' / ('26.3')='26.3', 走 DATE_BASED_PATTERN 分支",
+        "DATE_BASED_PATTERN=(\\d{2}\\.\\d+(?:\\.\\d+)?)(?:-(snapshot|pre|rc)-(\\d+))? 匹配 26.2/26.3/26.1.1, 不匹配 1.21.11 -> 26.x 是同一条代码路径"
+      ],
+      "note": "26.2 官方公告当时的推荐值是 0.19.3, 但 0.19.5 对 26.2/26.3 走同一分支, 无需按版本复制"
     },
     "installer": {
       "file": "fabric-installer-1.1.2.jar",
       "sha256": "61e035bf7bf70153e127440ce34de47c9036f0a2d0c65d1529454bd35ceefe4f",
       "size": 212123,
-      "version": "1.1.2"
+      "version": "1.1.2",
+      "applies_to": [
+        "26.2",
+        "26.3",
+        "任意 MC 版本"
+      ],
+      "version_independent": true,
+      "verified_at": "2026-10-02",
+      "verified_by": [
+        "jar 内 0 处 MC 版本字符串(26.2/26.3/26.1/1.21/1.20/25w 全部为 0 次)",
+        "版本列表运行时从 meta.fabricmc.net/ 与 launchermeta.mojang.com 拉取, 未内置"
+      ],
+      "note": "纯启动器, 装哪个 MC 版本由运行时选择决定"
     },
     "yarn": {
       "file": "yarn-1.21.11+build.6.jar",
       "sha256": "0992cc59fd14532c62a8431b53e198c916abeca1c7f64420f741959e29630c68",
       "size": 1286081,
-      "version": "1.21.11+build.6"
+      "version": "1.21.11+build.6",
+      "applies_to": [
+        "1.21.11"
+      ],
+      "version_independent": false,
+      "note": "26.1 起官方发布未混淆版本, 26.2/26.3 不需要 mappings, 此文件仅为历史遗留"
     },
     "api": {
       "file": "26.3/fabric-api-0.161.0+26.3.jar",
@@ -49,5 +86,21 @@
   "legal": {
     "minecraft_jar": "本仓库不含 Minecraft 客户端/服务端 jar。Fabric Loom 在构建时会自动从 Mojang 官方服务器拉取, 请遵守 Mojang/Microsoft EULA。",
     "included": "仅含开源工具链: JDK(开源许可) + Fabric loader/installer/yarn/API(开源许可)"
+  },
+  "layout": {
+    "policy": "按 MC 版本绑定的组件进 26.2/ 26.3/; 版本无关的公共件留在 toolchain/",
+    "version_bound": [
+      "fabric-api  (jar 内 fabric.mod.json 写死 minecraft ~26.2- / ~26.3-)"
+    ],
+    "version_independent": [
+      "jdk 25",
+      "fabric-loader",
+      "fabric-installer",
+      "yarn(但对 26.x 无用途)"
+    ],
+    "cross_ref": {
+      "26.2": "26.2/versions.json -> shared_artifacts",
+      "26.3": "26.3/versions.json -> shared_artifacts"
+    }
   }
 }

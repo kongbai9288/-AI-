@@ -120,6 +120,34 @@ fabric_api_version=0.161.0+26.3
 
 ---
 
+## 二之一、`toolchain/` 里的东西为什么不按版本分
+
+只有 **Fabric API 是版本绑定的**（jar 内 `fabric.mod.json` 写死 `minecraft ~26.2-` / `~26.3-`），
+所以它进了 `26.2/` 与 `26.3/`。Loader、Installer、JDK 都是版本无关的，留在 `toolchain/` 只存一份。
+判据是实测出来的，不是凭感觉：
+
+| 组件 | 实验 | 结果 |
+|---|---|---|
+| Loader 0.19.5 | 916 个条目里搜 `26.2` / `26.3` | **0 次**（只有 `McVersionLookup` 一张历史版本表，最新硬编码条目是 `26.1.1`） |
+| Loader 0.19.5 | 反射真跑 `McVersionLookup.getRelease` | `26.2→26.2`、`26.3→26.3`、`26.3-rc-2→26.3` |
+| Loader 0.19.5 | 用 loader 自己的正则匹配 | `DATE_BASED_PATTERN=(\d{2}\.\d+(?:\.\d+)?)(?:-(snapshot\|pre\|rc)-(\d+))?` 匹配 26.2/26.3/26.1.1，不匹配 1.21.11 —— **26.2 与 26.3 走同一条分支** |
+| Installer 1.1.2 | 133 个条目里搜 MC 版本串 | `26.2`/`26.3`/`26.1`/`1.21`/`1.20`/`25w` **全部 0 次**，版本列表运行时从 `meta.fabricmc.net` 拉取 |
+| JDK 25 | 26.2 / 26.3 的 Mojang 元数据 | 都要求 Java 25，同一份够用 |
+
+> 26.2 官方公告当时的推荐 loader 是 `0.19.3`，但 0.19.5 对 26.2/26.3 行为一致，不必复制两份。
+
+想要"版本目录里工具链齐全"别复制，用组装脚本（软链，不产生重复副本）：
+
+```bash
+python3 scripts/use_version.py 26.3          # 软链公共件 + 摊平 API 子模块, 打印 JAVA_HOME / classpath
+python3 scripts/use_version.py 26.3 --copy   # 离线打包时真的复制
+python3 scripts/use_version.py 26.3 --jdk    # 顺带 cat 分卷 + 解压 JDK
+```
+
+详细判据与实验复现步骤见 [`toolchain/README.md`](toolchain/README.md)。
+
+---
+
 ## 二之二、版本 API 表（两个目录各一份，逐条实测）
 
 | 目录 | 表 | 重跑命令 |
@@ -376,6 +404,7 @@ javap -cp "$CP" net.minecraft.world.entity.Entity   # 核对签名
 | `fabric-api-0.160.0+26.2.jar` | 同上（manifest 无此条目，为补记录） | ✅ `5f3dff88…ea05e`，已写入 `26.2/versions.json` |
 | 26.3 版本基线 | 核对 fabricmc.net/develop、Fabric 26.3 公告、Modrinth | ✅ loader 0.19.5 / API 0.161.0+26.3 / Java 25 |
 | API 增删 | 解开两个 API jar 的 jar-in-jar 子模块按类名比对 | ✅ 与 26.3 公告的移除清单一致 |
+| Loader / Installer 版本无关性 | 字节扫描 + 反射真跑 `McVersionLookup` | ✅ loader 对 26.2/26.3 同分支；installer 0 处版本串 |
 | 版本 API 表（26.2） | `javap` 25 读 fabric-api jar + mixin 注解 | ✅ 43 条：37 PASS / 1 UNPROVEN / 5 INFO |
 | 版本 API 表（26.3） | 同上 | ✅ 43 条：37 PASS / 1 UNPROVEN / 5 INFO |
 | 真实 Gradle 构建 | 本环境无法访问 maven.fabricmc.net / piston-meta | ⚠️ 未执行，需在有外网的机器或 GitHub Actions 上跑 |

@@ -1,0 +1,14 @@
+# 组装产物：由 scripts/use_version.py 生成，不入库
+26.2/toolchain/
+26.3/toolchain/
+
+# 构建产物
+build/
+.gradle/
+*.class
+
+# 本地实验残留
+cp_26.2/
+cp_26.3/
+exp/
+stub/
