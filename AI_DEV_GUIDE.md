@@ -120,6 +120,49 @@ fabric_api_version=0.161.0+26.3
 
 ---
 
+## 二之二、版本 API 表（两个目录各一份，逐条实测）
+
+| 目录 | 表 | 重跑命令 |
+|---|---|---|
+| `26.3/` | `26.3/API_TABLE.md` + `26.3/api_table.json` | `python3 scripts/verify_api_table.py 26.3` |
+| `26.2/` | `26.2/API_TABLE.md` + `26.2/api_table.json` | `python3 scripts/verify_api_table.py 26.2` |
+
+每份 43 条，三条实验通道：
+1. **Fabric API**（25 条）：`javap` 读 jar-in-jar 子模块的真实签名
+2. **MC 本体**（13 条）：`javap -v` 从 Fabric 的 mixin 注解
+   （`target="Lnet/minecraft/...;method()Desc"`）取真实 MC 签名 —— mixin 目标写错就注入失败，是硬证据
+3. **符号探测**（5 条）：在子模块 class 常量池里搜字节串（只能证明"被引用"，不能证明"不存在"）
+
+当前结果：两版本均 **37 PASS / 1 UNPROVEN / 5 INFO**。
+
+### 实测纠错的旧教程写法（这张表最大的用处）
+
+| 旧教程写法 | 实测真实情况（26.2 与 26.3 均如此） |
+|---|---|
+| `ItemGroupEvents.modifyEntriesEvent(...)` | 类**不存在** → `CreativeModeTabEvents.modifyOutputEvent(ResourceKey<CreativeModeTab>)` |
+| `ServerTickEvents.END_WORLD_TICK` | 实际是 `END_LEVEL_TICK`（还有 `END_SERVER_TICK`） |
+| `PayloadTypeRegistry.playS2C()` | 实际是 `clientboundPlay()` / `serverboundPlay()` |
+| `RegistryAttributeHolder.getAttribute(...)` | 实际是 `addAttribute(...)` / `hasAttribute(...)` |
+| `ItemStack.hurtAndBreak(int, LivingEntity, EquipmentSlot)` | 26.3 已被 Fabric 重定向到 `hurtAndBreak(int, ServerLevel, ServerPlayer, Consumer)` |
+
+### 26.2 → 26.3 实测差异（脚本 diff 出来的）
+
+| API | 26.2 | 26.3 |
+|---|---|---|
+| `FuelValueEvents` | present | **absent** |
+| `CompostableRegistry` | present | **absent** |
+| `FabricPotionBrewingBuilder` | present | **absent** |
+| `FabricBrewingProvider`（datagen） | **absent** | present |
+| `Strippable/Tillable/FlattenableBlockRegistry` | present | **absent** |
+| `FluidVariantAttributes` | `enableColoredVanillaFluidNames()` | `getColoredName()` + `getAssociatedColor()` |
+| `FluidFlowEvents.ALLOW` | present | present（**两版都有**，别信"26.3 才新增"的说法） |
+| 子模块数 | 43 | 44 |
+
+> 唯一 UNPROVEN：`Entity.hurt` —— 本仓库没有 MC 本体 jar，且 Fabric 的 mixin 没触及它，
+> 所以拿不到证据。写伤害代码前请在有 MC jar 的环境跑 `javap -cp <mc-jar> net.minecraft.world.entity.Entity`。
+
+---
+
 ## 三、26.2 API 速查（javap 实测签名，非记忆）
 
 > 以下均从 `minecraft-26.2-client.jar` + `fabric-api-0.160.0+26.2.jar` 反编译核对过。
@@ -333,6 +376,8 @@ javap -cp "$CP" net.minecraft.world.entity.Entity   # 核对签名
 | `fabric-api-0.160.0+26.2.jar` | 同上（manifest 无此条目，为补记录） | ✅ `5f3dff88…ea05e`，已写入 `26.2/versions.json` |
 | 26.3 版本基线 | 核对 fabricmc.net/develop、Fabric 26.3 公告、Modrinth | ✅ loader 0.19.5 / API 0.161.0+26.3 / Java 25 |
 | API 增删 | 解开两个 API jar 的 jar-in-jar 子模块按类名比对 | ✅ 与 26.3 公告的移除清单一致 |
+| 版本 API 表（26.2） | `javap` 25 读 fabric-api jar + mixin 注解 | ✅ 43 条：37 PASS / 1 UNPROVEN / 5 INFO |
+| 版本 API 表（26.3） | 同上 | ✅ 43 条：37 PASS / 1 UNPROVEN / 5 INFO |
 | 真实 Gradle 构建 | 本环境无法访问 maven.fabricmc.net / piston-meta | ⚠️ 未执行，需在有外网的机器或 GitHub Actions 上跑 |
 
 > 说明：`loom_version` / `gradle_version` 属于"官方公告值 + 本仓库历史实测值"的组合，

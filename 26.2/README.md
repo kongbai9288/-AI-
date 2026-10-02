@@ -23,7 +23,35 @@
 | `build.gradle` / `settings.gradle` | 26.1+ 写法的构建脚本（可直接跑） |
 | `fabric.mod.json` | 依赖约束模板（不含 `~` 锁版本） |
 | `versions.json` | 版本清单 + 制品 sha256 + 校验记录 |
+| **`API_TABLE.md`** | **版本 API 表（43 条，逐条实测）** |
+| `api_table.json` | 上表的机器可读版，含每条的签名与证据 |
 | `fabric-api-0.160.0+26.2.jar` | Fabric API 本体（jar-in-jar） |
+
+## 版本 API 表
+
+`API_TABLE.md` 里 43 条全部实测，重跑命令：
+
+```bash
+python3 scripts/verify_api_table.py 26.2     # 需 JDK 25 的 javap
+```
+
+- Fabric API 条目：`javap` 读 `fabric-api-0.160.0+26.2.jar` 的 43 个 jar-in-jar 子模块
+- MC 本体条目：`javap -v` 从 Fabric 的 mixin 注解里取真实 MC 签名（`@Redirect(target="Lnet/minecraft/...")`）
+- 状态：`PASS` 符合预期 / `UNPROVEN` 证据未采集到 / `INFO` 仅记录不做断言
+
+本次结果：**37 PASS、1 UNPROVEN、5 INFO**。
+
+### 本版本实测要点（都是跑出来的，不是抄的）
+
+- `ItemGroupEvents` **不存在**，物品栏走 `CreativeModeTabEvents`
+- `ServerTickEvents` 是 `END_LEVEL_TICK`，**不是**旧教程的 `END_WORLD_TICK`
+- `PayloadTypeRegistry` 是 `clientboundPlay()` / `serverboundPlay()`，**不是** `playS2C()`
+- 燃料/堆肥仍用 Fabric 的 `FuelValueEvents` 与 `CompostableRegistry`
+  （26.3 起改走 `DataComponents.COOKING_FUEL` / `COMPOSTABLE`，升级时要改）
+- 酿造仍用 `FabricPotionBrewingBuilder`（26.3 起换成 `FabricBrewingProvider`）
+- 方块转换仍用 `StrippableBlockRegistry` / `TillableBlockRegistry` / `FlattenableBlockRegistry`
+  （26.3 全部删除）
+- 流体颜色：`FluidVariantAttributes.enableColoredVanillaFluidNames()`（26.3 换成 `getColoredName`）
 
 ## 26.2 的坑（与旧教程冲突的地方）
 

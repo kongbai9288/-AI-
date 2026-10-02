@@ -23,7 +23,36 @@
 | `build.gradle` / `settings.gradle` | 26.1+ 写法的构建脚本（可直接跑） |
 | `fabric.mod.json` | 依赖约束模板（不含 `~` 锁版本） |
 | `versions.json` | 版本清单 + 制品 sha256 + 校验记录 |
+| **`API_TABLE.md`** | **版本 API 表（43 条，逐条实测）** |
+| `api_table.json` | 上表的机器可读版，含每条的签名与证据 |
 | `fabric-api-0.161.0+26.3.jar` | Fabric API 本体（jar-in-jar） |
+
+## 版本 API 表
+
+`API_TABLE.md` 里 43 条全部实测，重跑命令：
+
+```bash
+python3 scripts/verify_api_table.py 26.3     # 需 JDK 25 的 javap
+```
+
+- Fabric API 条目：`javap` 读 `fabric-api-0.161.0+26.3.jar` 的 44 个 jar-in-jar 子模块
+- MC 本体条目：`javap -v` 从 Fabric 的 mixin 注解里取真实 MC 签名（`@Redirect(target="Lnet/minecraft/...")`）
+- 状态：`PASS` 符合预期 / `UNPROVEN` 证据未采集到 / `INFO` 仅记录不做断言
+
+本次结果：**37 PASS、1 UNPROVEN、5 INFO**。
+
+### 本版本实测要点（都是跑出来的，不是抄的）
+
+- `ItemGroupEvents` **不存在**，物品栏走 `CreativeModeTabEvents.modifyOutputEvent(ResourceKey<CreativeModeTab>)`
+- `ServerTickEvents` 是 `END_LEVEL_TICK`，**不是**旧教程的 `END_WORLD_TICK`
+- `PayloadTypeRegistry` 是 `clientboundPlay()` / `serverboundPlay()`，**不是** `playS2C()`
+- `RegistryAttributeHolder` 是 `addAttribute` / `hasAttribute`，没有 `getAttribute`
+- 流体：`FluidVariantAttributes.getColoredName(FluidVariant)` + `getAssociatedColor(...)`
+  （26.2 的 `enableColoredVanillaFluidNames()` 已删除）
+- `ItemStack.hurtAndBreak(int, ServerLevel, ServerPlayer, Consumer)`：旧重载
+  `hurtAndBreak(int, LivingEntity, EquipmentSlot)` 在 26.3 被 Fabric 直接重定向，别再写旧签名
+- MC 侧真实签名：`Item.use(Level, Player, InteractionHand) → InteractionResult`、
+  `ServerLevel.addFreshEntity(Entity) → boolean`、`Item.getCraftingRemainder() → ItemStackTemplate`
 
 ## 26.2 → 26.3 要改什么
 
