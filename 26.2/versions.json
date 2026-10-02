@@ -1,0 +1,65 @@
+{
+  "schema": 1,
+  "minecraft": "26.2",
+  "status": "archived",
+  "updated": "2026-10-02",
+  "baseline": {
+    "minecraft_version": "26.2",
+    "java_version": "25",
+    "loader_version": "0.19.5",
+    "loom_version": "1.17-SNAPSHOT",
+    "gradle_version": "9.7.0",
+    "fabric_api_version": "0.160.0+26.2",
+    "mappings": null
+  },
+  "baseline_notes": {
+    "java": "26.1 起强制 Java 25（class 主版本 69），不可降级",
+    "loader": "Fabric API 0.160.0+26.2 的 fabric.mod.json 要求 fabricloader >=0.18.4, java >=25, minecraft ~26.2-；仓库实测 0.19.5 可用",
+    "loom": "26.2 官方公告为 Loom 1.17 + Gradle 9.5.1；本仓库实测 Loom 1.18.0-alpha.21 需要 Gradle 9.7.0（plugin api-version 变体不匹配会报 No matching variant）。锁 1.17-SNAPSHOT 时用 9.6.0/9.7.0 均可，用 1.18 系列必须 9.7.0",
+    "mappings": "26.1 起官方发布未混淆版本，不再需要 mappings/yarn；写了会报 mappings were not built for 26.2"
+  },
+  "artifacts": [
+    {
+      "file": "fabric-api-0.160.0+26.2.jar",
+      "path": "26.2/fabric-api-0.160.0+26.2.jar",
+      "sha256": "5f3dff88e1661166e222213302b25ace6c36dc3683804cbd4b5acf93138ea05e",
+      "size": 2542898,
+      "game_version_declared": "~26.2-",
+      "loader_required": ">=0.18.4",
+      "java_required": ">=25",
+      "modules": 43,
+      "verified_at": "2026-10-02",
+      "verified_by": "从仓库 blob 重新下载后计算 sha256 并与本条比对",
+      "status": "verified"
+    }
+  ],
+  "shared_artifacts": {
+    "note": "以下组件与 MC 版本无关，统一放在 toolchain/ 并由 toolchain/manifest.json 记录 sha256",
+    "files": [
+      "toolchain/fabric-loader-0.19.5.jar",
+      "toolchain/fabric-installer-1.1.2.jar",
+      "toolchain/jdk-25-linux-x64.tar.gz.part-*"
+    ]
+  },
+  "api_probe": {
+    "method": "解压 fabric-api 的 jar-in-jar 子模块后按类名检索",
+    "present": [
+      "CreativeModeTabEvents",
+      "FabricCreativeModeTabOutput",
+      "StrippableBlockRegistry",
+      "TillableBlockRegistry",
+      "FlattenableBlockRegistry",
+      "FabricPotionBrewingBuilder",
+      "CompostableRegistry",
+      "FuelValueEvents",
+      "DefaultItemComponentEvents",
+      "FluidFlowEvents"
+    ],
+    "absent": ["ItemGroupEvents"]
+  },
+  "sources": [
+    "https://fabricmc.net/2026/06/15/262.html",
+    "https://fabricmc.net/develop/",
+    "仓库 toolchain/manifest.json（历史记录）"
+  ]
+}

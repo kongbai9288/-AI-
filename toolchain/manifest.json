@@ -34,10 +34,12 @@
       "version": "1.21.11+build.6"
     },
     "api": {
-      "file": "fabric-api-0.161.0+26.3.jar",
+      "file": "26.3/fabric-api-0.161.0+26.3.jar",
       "sha256": "86f16178a3cecc887a85a4cfe9a79d92fa7341d8f39b5951a4d6ad800ab657a6",
       "size": 2620967,
-      "version": "0.161.0+26.3"
+      "version": "0.161.0+26.3",
+      "dir": "26.3",
+      "note": "按 MC 版本归档: fabric-api 放在 26.3/ 目录(26.2 版本见 26.2/versions.json); 若工作流重跑, 新 jar 可能落在 toolchain/, 以本文件记录为准"
     }
   },
   "reassemble": {

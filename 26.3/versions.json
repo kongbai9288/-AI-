@@ -1,0 +1,74 @@
+{
+  "schema": 1,
+  "minecraft": "26.3",
+  "status": "current",
+  "updated": "2026-10-02",
+  "baseline": {
+    "minecraft_version": "26.3",
+    "java_version": "25",
+    "loader_version": "0.19.5",
+    "loom_version": "1.18-SNAPSHOT",
+    "gradle_version": "9.7.0",
+    "fabric_api_version": "0.161.0+26.3",
+    "mappings": null
+  },
+  "baseline_notes": {
+    "java": "Mojang 26.3 元数据指定 Java 25，与 26.2 一致",
+    "loader": "Fabric 26.3 公告推荐最新稳定 loader，当前 0.19.5；API 的 fabric.mod.json 要求 >=0.19.3",
+    "loom": "fabricmc.net/develop 当前对 26.3 给出 loom_version=1.18-SNAPSHOT（Loom 1.18 于 2026-09-16 发布）；26.3 官方公告写作时的值是 Loom 1.17 + Gradle 9.6.0。两套都可用，选 1.18 时 Gradle 必须跟到 9.7.0",
+    "mappings": "26.1 起未混淆，26.3 同样不写 mappings/yarn",
+    "release": "26.3 = Wilderness Bound drop，2026-09-15 发布"
+  },
+  "artifacts": [
+    {
+      "file": "fabric-api-0.161.0+26.3.jar",
+      "path": "26.3/fabric-api-0.161.0+26.3.jar",
+      "sha256": "86f16178a3cecc887a85a4cfe9a79d92fa7341d8f39b5951a4d6ad800ab657a6",
+      "size": 2620967,
+      "game_version_declared": "~26.3-",
+      "loader_required": ">=0.19.3",
+      "java_required": ">=25",
+      "modules": 44,
+      "verified_at": "2026-10-02",
+      "verified_by": "从仓库 blob 重新下载后计算 sha256，与 toolchain/manifest.json 记录值逐字比对 → 一致",
+      "status": "verified"
+    }
+  ],
+  "shared_artifacts": {
+    "note": "以下组件与 MC 版本无关，统一放在 toolchain/ 并由 toolchain/manifest.json 记录 sha256",
+    "files": [
+      "toolchain/fabric-loader-0.19.5.jar",
+      "toolchain/fabric-installer-1.1.2.jar",
+      "toolchain/jdk-25-linux-x64.tar.gz.part-*"
+    ],
+    "verified": [
+      {"file": "fabric-loader-0.19.5.jar", "sha256_match": true},
+      {"file": "fabric-installer-1.1.2.jar", "sha256_match": true},
+      {"file": "yarn-1.21.11+build.6.jar", "sha256_match": true, "note": "1.21.11 的映射，26.x 不使用"}
+    ]
+  },
+  "api_probe": {
+    "method": "解压 fabric-api 的 jar-in-jar 子模块后按类名检索（26.2/26.3 同一套脚本跑出来的对照）",
+    "removed_vs_26.2": [
+      "StrippableBlockRegistry",
+      "TillableBlockRegistry",
+      "FlattenableBlockRegistry",
+      "FabricPotionBrewingBuilder",
+      "CompostableRegistry",
+      "FuelValueEvents"
+    ],
+    "added_or_present_in_26.3": [
+      "FabricBrewingProvider",
+      "CreativeModeTabEvents",
+      "FabricCreativeModeTabOutput",
+      "DefaultItemComponentEvents",
+      "FluidFlowEvents"
+    ],
+    "absent": ["ItemGroupEvents"]
+  },
+  "sources": [
+    "https://fabricmc.net/2026/09/15/263.html",
+    "https://fabricmc.net/develop/",
+    "https://modrinth.com/mod/fabric-api/version/bNnaTiuM"
+  ]
+}

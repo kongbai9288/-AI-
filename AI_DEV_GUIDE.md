@@ -1,72 +1,93 @@
-# AI 开发 Fabric Mod 速查（MC 26.2 实战版）
+# AI 开发 Fabric Mod 速查（26.2 / 26.3 实战版）
 
-> 本文件**已按 Minecraft 26.2 实测校准**。旧版内容（1.21.x / Yarn 时代）大量失效，
-> 若你来自旧教程，请以本文件为准。版本真相永远以 `gradle.properties` 为准。
+> 本文件**已按 Minecraft 26.2 实测校准，并已补入 26.3**（Wilderness Bound，2026-09-15）。
+> 旧版内容（1.21.x / Yarn 时代）大量失效，若你来自旧教程，请以本文件为准。
+> **版本基线唯一真相是各版本目录下的 `gradle.properties`**，README 只是说明。
 
 ---
 
-## 〇、先看清这个仓库的工具链能干什么、不能干什么
+## 〇、先选版本目录
+
+| 目录 | 状态 | 什么时候用 |
+|---|---|---|
+| [`26.3/`](26.3/) | ✅ 当前 | 新项目、升级项目。基线见 `26.3/gradle.properties`，制品校验见 `26.3/versions.json` |
+| [`26.2/`](26.2/) | 📦 归档 | 维护 26.2 旧 mod、对照 26.2→26.3 差异 |
+
+每个目录里都有一套可直接跑的 `gradle.properties` + `build.gradle` + `settings.gradle` + `fabric.mod.json`，
+以及记录 sha256 的 `versions.json`。**别跨目录混用版本值。**
+
+### 本仓库工具链能干什么、不能干什么
 
 | 文件 | 状态 | 说明 |
 |---|---|---|
 | `toolchain/jdk-25-linux-x64.tar.gz.part-*` | ✅ 可用 | `cat *.part-* > jdk.tar.gz` 后解压，Java 25 |
-| `toolchain/fabric-loader-0.19.5.jar` | ✅ 可用 | 运行时 loader |
-| `toolchain/fabric-api-0.160.0+26.2.jar` | ✅ 可用 | 44 个子模块，`META-INF/jars/` 里是 jar-in-jar |
+| `toolchain/fabric-loader-0.19.5.jar` | ✅ 可用 | 运行时 loader，26.2 / 26.3 通用 |
 | `toolchain/fabric-installer-1.1.2.jar` | ✅ 可用 | 生成服务端 |
-| `toolchain/yarn-1.21.11+build.6.jar` | ❌ **对 26.2 无效** | 这是 **1.21.11** 的映射，不是 26.2 的 |
+| `26.3/fabric-api-0.161.0+26.3.jar` | ✅ 可用 | 44 个子模块，`META-INF/jars/` 里是 jar-in-jar |
+| `26.2/fabric-api-0.160.0+26.2.jar` | ✅ 可用（归档） | 43 个子模块 |
+| `toolchain/yarn-1.21.11+build.6.jar` | ❌ **对 26.x 无效** | 这是 **1.21.11** 的映射，26.1 起用不上 |
 
-### ⚠️ 头号大坑：不要再给 26.2 找 mappings
+> 按版本区分的 Fabric API 已归入 `26.2/` 与 `26.3/`；
+> 与版本无关的公共组件（JDK / loader / installer）仍留在 `toolchain/`。
+> 版本与 sha256 以 `toolchain/manifest.json` + 各目录 `versions.json` 为准。
+
+### ⚠️ 头号大坑：不要再给 26.x 找 mappings
 
 - Minecraft 到 **1.21.11 为止是混淆的**，需要 Yarn / Mojang 映射。
 - **26.1 起官方发布未混淆版本**，Fabric 已停止维护第三方映射。
-- 所以 26.2 项目里 **`dependencies` 里不要写 `mappings` 那一行**，写了反而会报：
-  `The mappings (...) were not built for Minecraft version 26.2, proceed with caution.`
-- 源码里直接用 **Mojang 官方命名**（`ServerWorld`、`ItemStack`、`ResourceKey`、`Identifier`）。
+- 所以 26.2 / 26.3 项目里 **`dependencies` 里不要写 `mappings` 那一行**，写了反而会报：
+  `The mappings (...) were not built for Minecraft version 26.x, proceed with caution.`
+- 源码里直接用 **Mojang 官方命名**（`Level`、`ServerLevel`、`ItemStack`、`ResourceKey`、`Identifier`）。
 
 ---
 
-## 一、版本矩阵（26.2 实测）
+## 一、版本矩阵
 
-| 组件 | 值 | 踩过的坑 |
+| 组件 | 26.2 | 26.3 |
 |---|---|---|
-| Minecraft | `26.2` | 26 是年份、2 是第 2 个 drop，不是 1.21.x 的延续 |
-| Java | **25**（class 主版本 69） | 不可降级；MC 26.1+ 强制 |
-| Fabric Loader | `0.19.3` 起 | 26.2 推荐 0.19.5 |
-| Fabric Loom | **1.17+** | 插件 id 是 `net.fabricmc.fabric-loom`（不是 `fabric-loom`） |
-| Gradle | **9.7.0** | ⚠️ 见下 |
+| Minecraft | `26.2` | `26.3` |
+| Java | **25**（class 主版本 69） | **25** |
+| Fabric Loader | `0.19.5`（API 要求 `>=0.18.4`） | `0.19.5`（API 要求 `>=0.19.3`） |
+| Fabric Loom | `1.17-SNAPSHOT`；实测 `1.18.0-alpha.21` 也可用 | `1.18-SNAPSHOT`（develop 页当前推荐） |
+| Gradle | `9.7.0` | `9.7.0`（公告中配 Loom 1.17 时写的是 9.6.0） |
+| Fabric API | `0.160.0+26.2` | `0.161.0+26.3` |
+| mappings | 无 | 无 |
 
-### Gradle 版本是个隐藏雷
+> 26 = 年份，2/3 = 第几个 drop，不是 1.21.x 的延续。
 
-Loom 1.18.0-alpha.21 的 `runtimeElements` 变体带属性 `org.gradle.plugin.api-version = 9.7.0`。
-用 Gradle **9.1.0** 会报 `No matching variant ... required '9.1.0'`。
-实测 **Gradle 9.7.0 + JDK 25** 组合可用。
+### Loom / Gradle 是个隐藏雷
 
-反过来，用 **Gradle 8.14.3 + JDK 25** 会死在另一处：
-`BUG! exception in phase 'semantic analysis' ... Unsupported class file major version 69`
-（Gradle 8 的 Groovy 不认 Java 25 字节码）。**别试图靠降 JDK 绕开**，Loom 自己要求 JVM 25。
-
-结论：**JDK 25 + Gradle 9.7.0**，别自作聪明乱配。
+- Loom 1.18.0-alpha 系列的 `runtimeElements` 变体带属性 `org.gradle.plugin.api-version`。
+  用低版本 Gradle 会报 `No matching variant ... required '9.x.y'`。
+- 反过来 **Gradle 8.14.3 + JDK 25** 会死在另一处：
+  `BUG! exception in phase 'semantic analysis' ... Unsupported class file major version 69`
+  （Gradle 8 的 Groovy 不认 Java 25 字节码）。**别试图靠降 JDK 绕开**，Loom 自己要求 JVM 25。
+- 结论：**JDK 25 + Gradle 9.7.0**，别自作聪明乱配。
+- 26.3 官方公告写作时推荐的是 **Loom 1.17 + Gradle 9.6.0**，develop 页面现在给的是 **1.18-SNAPSHOT**。
+  两套都能用，选 1.18 就把 Gradle 顶到 9.7.0；若 1.18 报变体不匹配，回退 1.17 + 9.6.0。
 
 ---
 
-## 二、26.2 构建脚本模板（实测可编译）
+## 二、构建脚本模板（26.1+ 通用）
+
+完整文件直接取 `26.3/build.gradle` / `26.2/build.gradle`，要点如下：
 
 ```gradle
 plugins {
-    id 'net.fabricmc.fabric-loom' version "${loom_version}"
+    id 'net.fabricmc.fabric-loom' version "${loom_version}"   // ① 插件 id 带 net.fabricmc. 前缀
 }
 
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
-    // 26.1 起：不写 mappings
+    // ② 26.1 起：不写 mappings
 
-    // 26.1 起：modImplementation / modCompileOnly → implementation / compileOnly
+    // ③ 26.1 起：modImplementation / modCompileOnly → implementation / compileOnly
     implementation "net.fabricmc:fabric-loader:${loader_version}"
     implementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
 }
 
 loom {
-    noIntermediateMappings()   // 26.1 起无 intermediary 命名空间
+    noIntermediateMappings()   // ④ 26.1 起无 intermediary 命名空间
 }
 
 java {
@@ -77,16 +98,21 @@ java {
 tasks.withType(JavaCompile).configureEach { it.options.release = 25 }
 ```
 
-`gradle.properties`：
+`gradle.properties`（26.3 版，详见 `26.3/gradle.properties`）：
 
 ```properties
-minecraft_version=26.2
-loader_version=0.19.3
-loom_version=1.17-SNAPSHOT      # 想锁死可用 1.18.0-alpha.21
-fabric_api_version=0.160.0+26.2
+minecraft_version=26.3
+java_version=25
+loader_version=0.19.5
+loom_version=1.18-SNAPSHOT
+gradle_version=9.7.0
+fabric_api_version=0.161.0+26.3
 ```
 
-**26.1 起必须改的三件事**（漏一件就编不过）：
+26.2 项目取 `26.2/gradle.properties`（`minecraft_version=26.2`、`fabric_api_version=0.160.0+26.2`、
+`loom_version=1.17-SNAPSHOT`），其余键相同。两个目录的 `build.gradle` 写法一致，只是值不同。
+
+**26.1 起必须改的四件事**（漏一件就编不过）：
 1. 插件 id `fabric-loom` → `net.fabricmc.fabric-loom`
 2. 删掉 `mappings` 依赖
 3. `modImplementation` / `modCompileOnly` → `implementation` / `compileOnly`
@@ -139,8 +165,9 @@ CreativeModeTabEvents.modifyOutputEvent(COMBAT)
 - `modifyOutputEvent(ResourceKey<CreativeModeTab>)` → `Event<ModifyOutput>`
 - `ModifyOutput.modifyOutput(FabricCreativeModeTabOutput)`
 - `FabricCreativeModeTabOutput.accept(ItemStack)` / `accept(ItemStack, TabVisibility)` / `prepend(...)`
+- 已核验：`ItemGroupEvents` 在 26.2 / 26.3 的 API jar 里都**不存在**
 
-### 实体（26.2 关键差异）
+### 实体
 
 ```java
 // 拿世界：直接访问字段 world（26.2 已移除 getWorld()）
@@ -150,39 +177,30 @@ World world = this.world;        // Yarn 命名下是字段 world
 // 伤害：26.2 签名带 ServerWorld 且是 final
 public final void hurt(DamageSource, float);              // Mojang
 public final boolean hurtServer(ServerLevel, DamageSource, float);
-target.hurt(source, DAMAGE);
-// Yarn 侧：target.damage(ServerWorld, DamageSource, float)
 
 // 伤害源
 level.damageSources().thrown(this, owner);   // Mojang
-world.getDamageSources().generic();          // Yarn
 
 // 运动
 Vec3 vel = this.getDeltaMovement();   // Mojang / getVelocity() Yarn
-this.setDeltaMovement(vx, vy, vz);
 this.onGround();                       // Mojang / isOnGround() Yarn
 
 // 生成实体（客户端 World 上没有，只有 ServerLevel 有）
-((ServerLevel) level).addFreshEntity(entity);      // Mojang
-((ServerWorld) world).spawnNewEntityAndPassengers(entity);  // Yarn
+((ServerLevel) level).addFreshEntity(entity);
 
 // 范围查询
-List<LivingEntity> hits = level.getEntitiesOfClass(LivingEntity.class, box, pred);  // Mojang
-world.collectEntitiesByType(TypeFilter.instanceOf(LivingEntity.class), box, pred, list); // Yarn
+List<LivingEntity> hits = level.getEntitiesOfClass(LivingEntity.class, box, pred);
 ```
 
-**26.2 实体必须实现的抽象方法**：`defineSynchedData(SynchedEntityData.Builder)`
+**26.x 实体必须实现的抽象方法**：`defineSynchedData(SynchedEntityData.Builder)`
 （旧版叫 `initDataTracker`），不实现编译直接报错 `is not abstract and does not override`。
 
 ### 物品使用
 
 ```java
-// Mojang 命名
 public InteractionResult use(Level level, Player player, InteractionHand hand)
-// Yarn 命名
-public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
 ```
-返回值：`InteractionResult.SUCCESS` / `CONSUME` / `PASS` / `FAIL`（Yarn：`TypedActionResult.success/pass/consume`）
+返回值：`InteractionResult.SUCCESS` / `CONSUME` / `PASS` / `FAIL`
 
 ### 命令
 
@@ -190,46 +208,64 @@ public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand han
 CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
     dispatcher.register(CommandManager.literal("mycmd")
         .requires(src -> src.hasPermissionLevel(2))
-        .executes(ctx -> {
-            ctx.getSource().sendMessage(Text.literal("hi"));
-            return 1;
-        }));
+        .executes(ctx -> { ctx.getSource().sendMessage(Text.literal("hi")); return 1; }));
 });
 ```
-回调三参：`(CommandDispatcher<CommandSourceStack>, CommandBuildContext, Commands.CommandSelection)`
 
-### 客户端渲染（26.2 架构变了）
+### 客户端渲染（26.x 架构变了）
 
 ```java
-// 26.2 用 RenderState 模式，旧的 getTexture() 已移除
+// 26.x 用 RenderState 模式，旧的 getTexture() 已移除
 public class MyRenderer extends EntityRenderer<RollingLogEntity, EntityRenderState> {
     public MyRenderer(EntityRendererFactory.Context ctx) { super(ctx); }
     @Override public EntityRenderState createRenderState() { return new EntityRenderState(); }
 }
-// 注册
 EntityRendererRegistry.<RollingLogEntity>register(TYPE, MyRenderer::new);
-// 投掷物可复用：ThrownItemRenderer::new
 ```
+
+---
+
+## 三之二、26.2 → 26.3 迁移（新增）
+
+构建写法不用改（同为 26.1+ 规则），改的是**被移除的 API**。
+下表是把两个 Fabric API jar 解开后按类名比对的结果，与官方公告一致：
+
+| 26.2 有 | 26.3 | 26.3 怎么替代 |
+|---|---|---|
+| `FuelValueEvents` / `FuelRegistry` | ❌ 移除 | 物品组件 `DataComponents.COOKING_FUEL` |
+| `CompostableRegistry` | ❌ 移除 | 物品组件 `DataComponents.COMPOSTABLE`（可用 `DefaultItemComponentEvents.MODIFY`） |
+| `FabricPotionBrewingBuilder` | ❌ 移除 | `FabricBrewingProvider`（酿造配方改用 provider） |
+| `StrippableBlockRegistry` | ❌ 移除 | 数据驱动的 block transformer |
+| `TillableBlockRegistry` | ❌ 移除 | 同上 |
+| `FlattenableBlockRegistry` | ❌ 移除 | 同上 |
+| `FluidVariantAttributes`（实验性流体 API） | ✅ 转正 | 新增 `isInFluid` / `onFluidEntered` / `onFluidExited` |
+| — | 🆕 `FluidFlowEvents` | 流体流动回调（扩散 / 放置 / 邻居更新） |
+| `CreativeModeTabEvents` | ✅ 保留 | 写法不变 |
+
+其它 26.3 新增点（来自官方公告，未在本仓库 jar 上逐条实测）：
+- `TooltipFlag#shouldDisplayAllInformation`：给配方查看类 mod 索引 tooltip 用
+- 方块可覆写 `Block#getProvidedEnchantmentPower` 提供附魔威力
+- 子模块数：26.2 = 43，26.3 = 44
+- 客户端侧 GLFW → SDL 迁移（社区迁移笔记提及）：鼠标按键别再用魔法数字比较，
+  改用 `InputConstants` 字段 —— 此条未在本次 jar 比对中验证，写客户端输入代码时注意
 
 ---
 
 ## 四、Yarn 命名 vs Mojang 命名 对照
 
-本仓库的 yarn jar 是 1.21.11 的，**26.2 请用 Mojang 官方命名**。混用会编译失败：
+本仓库的 yarn jar 是 1.21.11 的，**26.x 请用 Mojang 官方命名**。混用会编译失败：
 
 | Yarn（旧） | Mojang（26.x） |
 |---|---|
 | `World` | `Level`（`ServerWorld` → `ServerLevel`） |
-| `ItemStack` | `ItemStack` |
 | `getVelocity()` / `setVelocity()` | `getDeltaMovement()` / `setDeltaMovement()` |
 | `isOnGround()` | `onGround()` |
 | `isClient()` | `isClientSide()` |
 | `damage(src, amt)` | `hurt(src, amt)` |
 | `spawnEntity()` | `addFreshEntity()`（仅 `ServerLevel`） |
-| `BlockPos` | `BlockPos` |
 | `Vec3d` | `Vec3` |
-| `Registry`/`BuiltInRegistries` | 同名 |
 | `RegistryKey` | `ResourceKey` |
+| `ItemStack` / `BlockPos` / `BuiltInRegistries` | 同名 |
 
 ---
 
@@ -237,25 +273,22 @@ EntityRendererRegistry.<RollingLogEntity>register(TYPE, MyRenderer::new);
 
 ```json
 "depends": {
-  "fabricloader": ">=0.19.3",
-  "minecraft": ">=26.2",      // ⚠️ 不要写 "~26.2"
+  "fabricloader": ">=0.19.5",
+  "minecraft": ">=26.3",      // ⚠️ 不要写 "~26.3"
   "java": ">=25",
-  "carpet": "*"               // 硬依赖：没装就拒绝加载
+  "fabric-api": "*"           // 硬依赖：没装就拒绝加载
 }
 ```
 
-- **`~26.2` 等价于 `>=26.2.0 <26.3.0`**。版本字符串带 hotfix 后缀或格式不符时，
+- **`~26.3` 等价于 `>=26.3.0 <26.4.0`**。版本字符串带 hotfix 后缀或格式不符时，
   会误判成"旧版本"拒绝加载 —— 症状是"我版本明明是对的，它非说我旧"。
 - `*` 表示"必须存在，任意版本"，放在 `depends` 里就是**硬依赖**，缺了直接崩。
-- 只想做成可选就放 `suggests`。
-- **运行时真正用到的库，必须在 `depends` 里**；只编译不运行用 `compileOnly` 即可，
-  别把它塞 `depends` 造成误拒。
+  只想做成可选就放 `suggests`。
+- **运行时真正用到的库，必须在 `depends` 里**；只编译不运行用 `compileOnly` 即可。
 
 ### 配套纪律
-- **版本基线唯一真相是 `gradle.properties`**，README 只是说明。两处冲突时以 properties 为准 —— 
-  不一致是"加载器版本不对"这类玄学报错的高发来源。
-- `processResources` 里 `expand` 了哪些变量，`fabric.mod.json` 里才能用哪些 `${}`，
-  没 expand 的写成硬编码，改 properties 不会同步。
+- **版本基线唯一真相是 `gradle.properties`**（26.3 项目看 `26.3/gradle.properties`）。
+- `processResources` 里 `expand` 了哪些变量，`fabric.mod.json` 里才能用哪些 `${}`。
 
 ---
 
@@ -277,19 +310,41 @@ javap -cp "$CP" net.minecraft.world.entity.Entity   # 核对签名
 
 ## 七、给下一个 AI 的防坑清单
 
-1. **先确认 MC 版本再动手**。26.1+ 和 1.21.x 是两套世界，API 几乎全变。
-2. **不要凭记忆写 API** —— 用 `javap` 核对（本仓库有现成 `jap.sh`）。
-3. **别给 26.2 找 mappings** —— 游戏不混淆，`mappings` 依赖是多余的。
-4. **Gradle 9.7.0 + JDK 25**，别乱配，8.x 和 9.1 都有坑。
+1. **先确认 MC 版本再动手**，并先翻对应目录（`26.3/` 或 `26.2/`）的 `gradle.properties`。
+2. **不要凭记忆写 API** —— 用 `javap` 核对。
+3. **别给 26.x 找 mappings** —— 游戏不混淆，`mappings` 依赖是多余的。
+4. **JDK 25 + Gradle 9.7.0**，别乱配；Loom 1.18 需要 Gradle 9.7.0。
 5. **实体要实现 `defineSynchedData`**，渲染要按 RenderState 模式写。
 6. **`fabric.mod.json` 别用 `~`** 锁版本。
-7. **版本表只信 `gradle.properties`**。
+7. **26.3 起别再用 `FuelRegistry` / `CompostableRegistry` / `FabricPotionBrewingBuilder` /
+   Strippable / Tillable / Flattenable**，改物品组件与新 API。
 8. **每加一个功能就编一次**，别堆到最后。
 
-## 八、参考
+---
+
+## 八、本次核验记录（2026-10-02）
+
+| 项目 | 方法 | 结果 |
+|---|---|---|
+| `fabric-api-0.161.0+26.3.jar` | 从仓库重新下载后算 sha256，与 `toolchain/manifest.json` 比对 | ✅ 一致（`86f16178…b657a6`） |
+| `fabric-loader-0.19.5.jar` | 同上 | ✅ 一致 |
+| `fabric-installer-1.1.2.jar` | 同上 | ✅ 一致 |
+| `yarn-1.21.11+build.6.jar` | 同上 | ✅ 一致（但对 26.x 无用） |
+| `fabric-api-0.160.0+26.2.jar` | 同上（manifest 无此条目，为补记录） | ✅ `5f3dff88…ea05e`，已写入 `26.2/versions.json` |
+| 26.3 版本基线 | 核对 fabricmc.net/develop、Fabric 26.3 公告、Modrinth | ✅ loader 0.19.5 / API 0.161.0+26.3 / Java 25 |
+| API 增删 | 解开两个 API jar 的 jar-in-jar 子模块按类名比对 | ✅ 与 26.3 公告的移除清单一致 |
+| 真实 Gradle 构建 | 本环境无法访问 maven.fabricmc.net / piston-meta | ⚠️ 未执行，需在有外网的机器或 GitHub Actions 上跑 |
+
+> 说明：`loom_version` / `gradle_version` 属于"官方公告值 + 本仓库历史实测值"的组合，
+> 若新环境下 Loom 报 `No matching variant`，按第一节的回退方案处理。
+
+---
+
+## 九、参考
 
 - Fabric 开发文档：https://docs.fabricmc.net/
-- 26.2 迁移：https://docs.fabricmc.net/develop/porting/
-- Fabric 26.2 公告：https://fabricmc.net/2026/06/15/262.html
+- 26.3 公告（Wilderness Bound）：https://fabricmc.net/2026/09/15/263.html
+- 26.2 公告：https://fabricmc.net/2026/06/15/262.html
 - 组件推荐版本：https://fabricmc.net/develop
+- Fabric API（Modrinth，含 sha）：https://modrinth.com/mod/fabric-api
 - 映射查询（1.21.11 及更早）：https://mapping.dev/

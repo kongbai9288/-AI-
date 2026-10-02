@@ -1,0 +1,61 @@
+// Minecraft 26.2 构建脚本（26.1+ 通用写法）
+// 26.1 起与旧版（1.21.x）有四处硬差异，漏一处就编不过，见下方注释
+plugins {
+    id 'java'
+    id 'net.fabricmc.fabric-loom' version "${loom_version}"   // ① 插件 id 带 net.fabricmc. 前缀
+}
+
+version      = project.mod_version
+group        = project.maven_group
+base.archivesName = "${project.archives_base_name}-mc${project.minecraft_version}"
+
+repositories {
+    maven { url 'https://maven.fabricmc.net/' }
+    mavenCentral()
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    // ② 26.1 起没有 mappings / yarn 依赖，写了会报
+    //    "The mappings (...) were not built for Minecraft version 26.2"
+
+    // ③ modImplementation / modCompileOnly → implementation / compileOnly
+    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+}
+
+loom {
+    noIntermediateMappings()   // ④ 26.1 起无 intermediary 命名空间
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "minecraft_version", project.minecraft_version
+    inputs.property "loader_version", project.loader_version
+    inputs.property "java_version", project.java_version
+    filteringCharset "UTF-8"
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version,
+               "minecraft_version": project.minecraft_version,
+               "loader_version": project.loader_version,
+               "java_version": project.java_version
+    }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
+    // 不要 withSourcesJar()：无 intermediary，remapSourcesJar 无法工作
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 25            // class 主版本 69
+    it.options.encoding = "UTF-8"
+}
+
+// ⑤ 产物用 jar 任务，26.1 起不再有 remapJar
+jar {
+    from("LICENSE") { rename { "${it}_${project.base.archivesName.get()}" } }
+}
+
+// 产物在 build/libs/

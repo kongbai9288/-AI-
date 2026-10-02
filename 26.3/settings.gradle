@@ -1,0 +1,8 @@
+pluginManagement {
+    repositories {
+        maven { url 'https://maven.fabricmc.net/' }   // Loom 从这里解析
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = 'aimod'

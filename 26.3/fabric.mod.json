@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "aimod",
+  "version": "${version}",
+  "name": "AI Fabric Mod",
+  "description": "由 AI 生成的 Fabric mod 骨架 (MC 26.3)",
+  "authors": ["AI"],
+  "contact": {},
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.example.aimod.AIMod"],
+    "client": ["com.example.aimod.client.AIModClient"]
+  },
+  "mixins": ["aimod.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": ">=26.3",
+    "java": ">=25",
+    "fabric-api": "*"
+  },
+  "suggests": {}
+}
